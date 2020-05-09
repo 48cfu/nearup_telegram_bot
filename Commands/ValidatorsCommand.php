@@ -31,6 +31,7 @@ class ValidatorsCommand extends UserCommand
 		$reply = "Current Betanet validators:".chr(10);
 		$i = 1;
 		$alertFound = false;
+		$validatorPositionsQuantity = strlen(count($currentValidators));
 		
 		foreach($currentValidators as $validator){
 			$alert =  "";
@@ -38,7 +39,7 @@ class ValidatorsCommand extends UserCommand
 				$alert =  " ⚠️ (".$validator["num_produced_blocks"]."/".$validator["num_expected_blocks"].")";
 				$alertFound = true;
 			}
-			$reply .= (str_pad($i++, 2, "0", STR_PAD_LEFT)).". ".$validator["account_id"].": ".(round($validator["stake"]/1000000000000000000000000))." NEAR".$alert.chr(10);
+			$reply .= (str_pad($i++, $validatorPositionsQuantity, "0", STR_PAD_LEFT)).". ".$validator["account_id"].": ".(round($validator["stake"]/1000000000000000000000000))." NEAR".$alert.chr(10);
 		}
 		
 		if($alertFound)
