@@ -4,26 +4,26 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
-use Near\NearData;
-use Near\NearView;
 
-include_once __DIR__ . '/../near.php';
-
-
-class CurrentProposalsCommand extends UserCommand
+class AboutCommand extends UserCommand
 {
+    protected $name = 'start';
+    protected $description = 'Welcome Screen';
+    protected $usage = '/start';
+    protected $version = '1.0.0';
+
     public function execute()
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
 
-        $validatorsData = NearData::GetNearRpcData("validators");
-
-        $reply = "Current Proposals:" . chr(10) . NearView::FormatValidators($validatorsData['result']['current_proposals']);
-
+        $output = [
+            "Near Shell Bot",
+            "Fill free to contribute: https://github.com/zavodil/nearup_telegram_bot"
+        ];
         $data = [
             'chat_id' => $chat_id,
-            'text' => $reply,
+            'text' => join(chr(10), $output),
         ];
 
         return Request::sendMessage($data);

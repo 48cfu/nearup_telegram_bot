@@ -23,11 +23,12 @@ class StartCommand extends UserCommand
             "/NextValidators - Next Validators",
             "/CurrentProposals - Current Proposals",
             "/CurrentFishermen - CurrentFishermen",
-            "/NextFishermen - Next Fishermen"
+            "/NextFishermen - Next Fishermen",
+            "/about - About bot"
         ];
         $data = [
             'chat_id' => $chat_id,
-            'text' => join(chr(10),  $menu ),
+            'text' => join(chr(10), $menu),
         ];
 
         return Request::sendMessage($data);

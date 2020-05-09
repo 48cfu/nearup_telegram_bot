@@ -37,16 +37,16 @@ Class NearView
         $alertFound = false;
         $validatorPositionsQuantity = strlen(count($validators));
 
-        foreach($validators as $validator){
-            $alert =  "";
-            if($validator["num_produced_blocks"] < ($validator["num_expected_blocks"] * 0.9)){
-                $alert =  " ⚠️ (".$validator["num_produced_blocks"]."/".$validator["num_expected_blocks"].")";
+        foreach ($validators as $validator) {
+            $alert = "";
+            if ($validator["num_produced_blocks"] < ($validator["num_expected_blocks"] * 0.9)) {
+                $alert = " ⚠️ (" . $validator["num_produced_blocks"] . "/" . $validator["num_expected_blocks"] . ")";
                 $alertFound = true;
             }
-            $reply .= (str_pad($i++, $validatorPositionsQuantity, "0", STR_PAD_LEFT)).". ".$validator["account_id"].": ".(round($validator["stake"]/1000000000000000000000000))." NEAR".$alert.chr(10);
+            $reply .= (str_pad($i++, $validatorPositionsQuantity, "0", STR_PAD_LEFT)) . ". " . $validator["account_id"] . ": " . (round($validator["stake"] / 1000000000000000000000000)) . " NEAR" . $alert . chr(10);
         }
 
-        if($alertFound)
+        if ($alertFound)
             $reply .= "Legend: ⚠️ - kickout risk (produced blocks / expected blocks)";
 
         return $reply;

@@ -1,10 +1,12 @@
 <?php
 
 namespace Longman\TelegramBot\Commands\UserCommands;
+
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 use Near\NearData;
 use Near\NearView;
+
 include_once __DIR__ . '/../near.php';
 
 
@@ -17,11 +19,11 @@ class CurrentFishermenCommand extends UserCommand
 
         $validatorsData = NearData::GetNearRpcData("validators");
 
-        $reply = "Current Fishermen:".chr(10).NearView::FormatValidators($validatorsData['result']['current_fishermen']);
+        $reply = "Current Fishermen:" . chr(10) . NearView::FormatValidators($validatorsData['result']['current_fishermen']);
 
         $data = [
             'chat_id' => $chat_id,
-            'text'    => $reply,
+            'text' => $reply,
         ];
 
         return Request::sendMessage($data);
