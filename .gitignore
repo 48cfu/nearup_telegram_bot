@@ -1,0 +1,9 @@
+.idea/misc.xml
+.idea/modules.xml
+.idea/nearup_bot.iml
+.idea/workspace.xml
+composer.lock
+vendor/
+.idea/vcs.xml
+settings.php
+.idea/php.xml
