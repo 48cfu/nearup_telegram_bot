@@ -4,10 +4,9 @@ namespace Near;
 
 Class NearData
 {
-    public static function GetNearRpcData($method)
+    public static function GetNearRpcData($method, $params = [null])
     {
-
-        $message = json_encode(array('jsonrpc' => '2.0', 'id' => "dontcare", 'method' => $method, 'params' => [null]));
+        $message = json_encode(array('jsonrpc' => '2.0', 'id' => "dontcare", 'method' => $method, 'params' => $params));
         $requestHeaders = ['Content-type: application/json'];
 
         $ch = curl_init("https://rpc.betanet.nearprotocol.com");
@@ -21,6 +20,14 @@ Class NearData
 
         $data = json_decode($json, true);
         return $data;
+    }
+
+    public static function GetAccountBalance($account){
+        return  NearData::GetNearRpcData("query", ["request_type" => "view_account", "finality" => "final", "account_id" => $account]);
+    }
+
+    public static function RoundNearBalance($amount){
+        return (round($amount / 1000000000000000000000000));
     }
 }
 
@@ -43,7 +50,7 @@ Class NearView
                 $alert = " ⚠️ (" . $validator["num_produced_blocks"] . "/" . $validator["num_expected_blocks"] . ")";
                 $alertFound = true;
             }
-            $reply .= (str_pad($i++, $validatorPositionsQuantity, "0", STR_PAD_LEFT)) . ". " . $validator["account_id"] . ": " . (round($validator["stake"] / 1000000000000000000000000)) . " NEAR" . $alert . chr(10);
+            $reply .= (str_pad($i++, $validatorPositionsQuantity, "0", STR_PAD_LEFT)) . ". " . $validator["account_id"] . ": " . NearData::RoundNearBalance($validator["stake"]) . " NEAR" . $alert . chr(10);
         }
 
         if ($alertFound)

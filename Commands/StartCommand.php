@@ -19,6 +19,7 @@ class StartCommand extends UserCommand
 
         $menu = [
             "Near Shell Betanet Bot",
+            "/ViewAccount username - Account data",
             "/CurrentValidators - Current Validators",
             "/NextValidators - Next Validators",
             "/CurrentProposals - Current Proposals",

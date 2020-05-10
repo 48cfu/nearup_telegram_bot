@@ -7,18 +7,12 @@ try {
     // Create Telegram API object
     $telegram = new Longman\TelegramBot\Telegram($bot_api_key, $bot_username);
 
-    $commands_paths = [
-        __DIR__ . '/Commands',
-    ];
-    // Add this line inside the try{}
-    $telegram->addCommandsPaths($commands_paths);
-
+    // Enable MySQL
     $telegram->enableMySql($mysql_credentials);
 
-    // Handle telegram webhook request
-    $telegram->handle();
+    // Handle telegram getUpdates request
+    $telegram->handleGetUpdates();
 } catch (Longman\TelegramBot\Exception\TelegramException $e) {
-    // Silence is golden!
     // log telegram errors
     // echo $e->getMessage();
 }
