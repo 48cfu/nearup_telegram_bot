@@ -19,7 +19,10 @@ class CurrentValidatorsCommand extends UserCommand
 
         $validatorsData = NearData::GetNearRpcData("validators");
 
-        $reply = "Current Validators:" . chr(10) . NearView::FormatValidators($validatorsData['result']['current_validators']);
+        if(isset($validatorsData['error']))
+            $reply = $validatorsData['error']['message'];
+        else
+            $reply = "Current Validators:" . chr(10) . NearView::FormatValidators($validatorsData['result']['current_validators']);
 
         $data = [
             'chat_id' => $chat_id,

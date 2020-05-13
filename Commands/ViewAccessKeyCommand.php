@@ -16,25 +16,24 @@ class ViewAccessKeyCommand extends UserCommand
         $chat_id = $message->getChat()->getId();
 
         $paramPosition = strpos($message->text, " ");
-        if($paramPosition > -1) {
+        if ($paramPosition > -1) {
             $account = substr($message->text, $paramPosition + 1);
-            if($account) {
-                $accountData = NearData::GetNearRpcData("query", ["request_type" => "view_access_key_list", "finality" => "final", "account_id" => $account]);
+            if ($account) {
+                $accountData = NearData:: GetAccountAccessKeys($account);
 
-                if(isset($accountData["error"]))
-                    $reply = $accountData["error"]["message"]." ".$accountData["error"]["data"];
+                if (isset($accountData["error"]))
+                    $reply = $accountData["error"]["message"] . " " . $accountData["error"]["data"];
                 else {
                     $output[] = "Account " . $account;
-                    foreach($accountData["result"]["keys"] as $key){
-                        $output[] = "- ".$key["public_key"]." (".$key["access_key"]["permission"].", nonce: ".$key["access_key"]["nonce"].")";
+                    foreach ($accountData["result"]["keys"] as $key) {
+                        $output[] = "- " . $key["public_key"] . " (" . $key["access_key"]["permission"] . ", nonce: " . $key["access_key"]["nonce"] . ")";
                     }
 
                     $reply = join(chr(10), $output);
                 }
             }
-        }
-        else
-            $reply = "Account now found. Usage: /ViewAccessKey username".$paramPosition;
+        } else
+            $reply = "Account now found. Usage: /ViewAccessKey username" . $paramPosition;
 
         $data = [
             'chat_id' => $chat_id,

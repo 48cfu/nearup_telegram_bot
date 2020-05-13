@@ -2,3 +2,7 @@ composer.lock
 vendor/
 .idea/
 settings.php
+core-master/
+node.js/faucet.js
+node.js/test.js
+node.js/test.php

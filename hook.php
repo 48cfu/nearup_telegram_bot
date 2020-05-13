@@ -3,19 +3,21 @@ require __DIR__ . '/vendor/autoload.php';
 
 require __DIR__ . '/settings.php';
 
+use Settings\Config;
+
 try {
-    // Create Telegram API object
-    $telegram = new Longman\TelegramBot\Telegram($bot_api_key, $bot_username);
+    $telegram = new Longman\TelegramBot\Telegram(Config::$bot_api_key, Config::$bot_username);
 
     $commands_paths = [
         __DIR__ . '/Commands',
     ];
-    // Add this line inside the try{}
+
     $telegram->addCommandsPaths($commands_paths);
 
-    $telegram->enableMySql($mysql_credentials);
+    $telegram->enableMySql(Config::$mysql_credentials);
 
-    // Handle telegram webhook request
+    //$telegram->enableLimiter();
+
     $telegram->handle();
 } catch (Longman\TelegramBot\Exception\TelegramException $e) {
     // Silence is golden!
