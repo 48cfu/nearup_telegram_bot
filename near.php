@@ -77,10 +77,47 @@ Class NearData
         }
     }
 
+    public static function SetUserCredentials($pdo, $id, $near_account, $public_key, $private_key)
+    {
+        try {
+            $sth = $pdo->prepare('
+                UPDATE user SET
+                `near_account` = :near_account, `public_key` = :public_key, `private_key`= :private_key, `key_added_at` = NOW()
+                WHERE id = :id
+                LIMIT 1
+            ');
+
+            $sth->bindValue(':id', $id);
+            $sth->bindValue(':near_account', $near_account);
+            $sth->bindValue(':public_key', $public_key);
+            $sth->bindValue(':private_key', $private_key);
+
+            $status = $sth->execute();
+        } catch (Exception $e) {
+            throw new TelegramException($e->getMessage());
+        }
+        return $status;
+    }
+
     public static function GetPrivateKey($pdo, $user_id)
     {
         try {
             $sth = $pdo->prepare('SELECT `private_key` FROM `user` WHERE `id` = :user_id LIMIT 1');
+
+            $sth->bindValue(':user_id', $user_id);
+
+            $sth->execute();
+
+            return $sth->fetchColumn(0);
+        } catch (Exception $e) {
+            throw new TelegramException($e->getMessage());
+        }
+    }
+
+    public static function GetPublicKey($pdo, $user_id)
+    {
+        try {
+            $sth = $pdo->prepare('SELECT `public_key` FROM `user` WHERE `id` = :user_id LIMIT 1');
 
             $sth->bindValue(':user_id', $user_id);
 
@@ -114,6 +151,9 @@ Class NearView
 {
     public static function FormatValidators($validators)
     {
+        if (!is_array($validators) || !count($validators))
+            return "Not found";
+
         usort($validators, function ($a, $b) {
             return strcmp($a["account_id"], $b["account_id"]);
         });

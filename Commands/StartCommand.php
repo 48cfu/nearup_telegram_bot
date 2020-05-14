@@ -25,7 +25,9 @@ class StartCommand extends UserCommand
         $menu[] = "Near Shell Betanet Bot";
         if($nearLogin){
             $menu[] = "Your current Near account: $nearLogin";
-            $menu[] = "/send - Send NEAR tokens";
+            $menu[] = "/checkBalance - Check Balance";
+            $menu[] = "/send - Send tokens to NEAR account";
+            $menu[] = "/sendTelegram - Send tokens to Telegram account";
         }
         else
             $menu[] = "/login - Authorize this bot in your NEAR account";

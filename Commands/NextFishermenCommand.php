@@ -19,7 +19,7 @@ class NextFishermenCommand extends UserCommand
 
         $validatorsData = NearData::GetNearRpcData("validators");
 
-        $reply = "Current Fishermen:" . chr(10) . NearView::FormatValidators($validatorsData['result']['next_fishermen']);
+        $reply = "Next Fishermen:"  . json_encode($validatorsData['result']). chr(10) . NearView::FormatValidators($validatorsData['result']['next_fishermen']);
 
         $data = [
             'chat_id' => $chat_id,

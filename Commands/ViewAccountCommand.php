@@ -36,7 +36,7 @@ class ViewAccountCommand extends UserCommand
             }
         }
         else
-            $reply = "Account now found. Usage: /ViewAccount username".$paramPosition;
+            $reply = "Account now found. Usage: /ViewAccount username";
 
         $data = [
             'chat_id' => $chat_id,
