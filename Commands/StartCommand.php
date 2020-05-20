@@ -40,6 +40,7 @@ class StartCommand extends UserCommand
             "/CurrentProposals - Current Proposals",
            // "/CurrentFishermen - CurrentFishermen",
            // "/NextFishermen - Next Fishermen",
+            "/GetKickouts - Previous epoch kickouts",
             "/about - About bot"
         ]);
 
