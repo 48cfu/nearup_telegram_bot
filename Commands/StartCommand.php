@@ -34,11 +34,12 @@ class StartCommand extends UserCommand
 
         $menu = array_merge ($menu, [
             "/ViewAccount username - Account data",
+            "/SeatPrice - Minimal stake for validator",
             "/CurrentValidators - Current Validators",
             "/NextValidators - Next Validators",
             "/CurrentProposals - Current Proposals",
-            "/CurrentFishermen - CurrentFishermen",
-            "/NextFishermen - Next Fishermen",
+           // "/CurrentFishermen - CurrentFishermen",
+           // "/NextFishermen - Next Fishermen",
             "/about - About bot"
         ]);
 
