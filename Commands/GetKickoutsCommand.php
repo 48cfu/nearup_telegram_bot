@@ -2,11 +2,14 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use Bot\Common;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 use Near\NearData;
 use Settings\Config;
 use Near\NearView;
+
+include_once __DIR__ . '/../bot.php';
 
 class GetKickoutsCommand extends UserCommand
 {
@@ -14,6 +17,11 @@ class GetKickoutsCommand extends UserCommand
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
+        $user = $message->getFrom();
+        $user_id = $user->getId();
+
+        if(!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
+            return false;
 
         $kickouts = shell_exec("cd " . Config::$nodejs_folder . "; node getKickouts.js 2>&1");
         $kickouts = json_decode($kickouts, true);
@@ -27,6 +35,9 @@ class GetKickoutsCommand extends UserCommand
             }
             else if(isset($reason["NotEnoughStake"])){
                 $reply .=  "Not Enough Stake."; //Stake ". NearData::RoundNearBalance($reason["NotEnoughStake"]["stake_u128"]).PHP_EOL;
+            }
+            else {
+                $reply .= $reason;
             }
             $output[] = $reply;
         }

@@ -2,12 +2,15 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use Bot\Common;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
 use Settings\Config;
 use Near\NearData;
+
+include_once __DIR__ . '/../bot.php';
 
 class LoginCommand extends UserCommand
 {
@@ -29,6 +32,9 @@ class LoginCommand extends UserCommand
         $text = trim($message->getText(true));
         $chat_id = $chat->getId();
         $user_id = $user->getId();
+
+        if(!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
+            return false;
 
         $data = [
             'chat_id' => $chat_id,

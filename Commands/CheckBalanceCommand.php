@@ -2,10 +2,12 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use Bot\Common;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 use Near\NearData;
 
+include_once __DIR__ . '/../bot.php';
 include_once __DIR__ . '/../near.php';
 
 class CheckBalanceCommand extends UserCommand
@@ -16,6 +18,9 @@ class CheckBalanceCommand extends UserCommand
         $chat_id = $message->getChat()->getId();
         $user = $message->getFrom();
         $user_id = $user->getId();
+
+        if(!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
+            return false;
 
         $pdo = NearData::InitializeDB();
         $account = NearData::GetUserLogin($pdo, $user_id);
