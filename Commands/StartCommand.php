@@ -33,6 +33,7 @@ class StartCommand extends UserCommand
         if ($nearLogin) {
             $menu[] = "Your current Near account: $nearLogin";
             $menu[] = "/checkBalance - Check Balance";
+            $menu[] = "/delegate - Delegate to staking-pool";
             $menu[] = "/send - Send tokens to NEAR account";
             $menu[] = "/sendTelegram - Send tokens to Telegram account";
         } else
@@ -49,6 +50,9 @@ class StartCommand extends UserCommand
             "/GetKickouts - Previous epoch kickouts",
             "/about - About bot"
         ]);
+
+        if ($nearLogin)
+            $menu[] = "/logout - Remove NEAR account from your telegram account";
 
         $data = [
             'chat_id' => $chat_id,
