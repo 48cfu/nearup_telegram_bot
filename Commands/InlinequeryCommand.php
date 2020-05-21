@@ -33,12 +33,14 @@ class InlinequeryCommand extends SystemCommand
                     "Storage Usage: " . NearData::RoundNearBalance($accountData["result"]["storage_usage"])
                 ];
 
+                $response = join(PHP_EOL, $output);
+
                 $replies = [
                     [
                         'id' => '001',
                         'title' =>  "Account " . $query,
-                        'description' =>  join(chr(10), $output),
-                        'input_message_content' => new InputTextMessageContent(['message_text' => '/ViewAccount@nearup_bot ' . $query]),
+                        'description' => $response,
+                        'input_message_content' => new InputTextMessageContent(['message_text' =>  "Account: $query".PHP_EOL.$response]),
                     ]
                 ];
 

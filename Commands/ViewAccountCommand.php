@@ -19,30 +19,29 @@ class ViewAccountCommand extends UserCommand
         $user = $message->getFrom();
         $user_id = $user->getId();
 
-        if(!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
+        if (!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
             return false;
 
         $paramPosition = strpos($message->text, " ");
-        if($paramPosition > -1) {
+        if ($paramPosition > -1) {
             $account = substr($message->text, $paramPosition + 1);
-            if($account) {
+            if ($account) {
                 $accountData = NearData::GetAccountBalance($account);
 
-                if(isset($accountData["error"]))
-                    $reply = $accountData["error"]["message"]." ".$accountData["error"]["data"];
+                if (isset($accountData["error"]))
+                    $reply = $accountData["error"]["message"] . " " . $accountData["error"]["data"];
                 else {
                     $output = [
                         "Account " . $account,
                         "Balance: " . NearData::RoundNearBalance($accountData["result"]["amount"]),
                         "Locked: " . NearData::RoundNearBalance($accountData["result"]["locked"]),
                         "Storage Usage: " . NearData::RoundNearBalance($accountData["result"]["storage_usage"]),
-                        "Access Keys List: /ViewAccessKey ".$account
+                        "Access Keys List: /ViewAccessKey " . $account
                     ];
                     $reply = join(chr(10), $output);
                 }
             }
-        }
-        else
+        } else
             $reply = "Account now found. Usage: /ViewAccount username";
 
         $data = [
