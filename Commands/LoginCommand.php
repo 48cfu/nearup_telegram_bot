@@ -106,7 +106,7 @@ class LoginCommand extends UserCommand
                         $successFlag = false;
                         foreach ($accountData["result"]["keys"] as $key) {
                             if ($key["public_key"] === $notes['public']) {
-                                $data['text'] = "You associated current telegram account with the NEAR account $account. Now you can /send NEAR tokens.";
+                                $data['text'] = "You associated current telegram account with the NEAR account $account. Now you can /send or /delegate NEAR tokens.";
 
                                 NearData::saveUserDetails($pdo, $user_id, $notes['account'], $notes['public'], $notes['private']);
                                 $successFlag = true;

@@ -36,6 +36,7 @@ class StartCommand extends UserCommand
             $menu[] = "/delegate - Delegate to staking-pool";
             $menu[] = "/send - Send tokens to NEAR account";
             $menu[] = "/sendTelegram - Send tokens to Telegram account";
+            $menu[] = "/deleteKey - Delete access Key from your NEAR account";
         } else
             $menu[] = "/login - Authorize this bot in your NEAR account";
 

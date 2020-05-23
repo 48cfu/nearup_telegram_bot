@@ -19,7 +19,7 @@ class ViewAccessKeyCommand extends UserCommand
         $user = $message->getFrom();
         $user_id = $user->getId();
 
-        if(!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
+        if (!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
             return false;
 
         $paramPosition = strpos($message->text, " ");
@@ -32,8 +32,12 @@ class ViewAccessKeyCommand extends UserCommand
                     $reply = $accountData["error"]["message"] . " " . $accountData["error"]["data"];
                 else {
                     $output[] = "Account " . $account;
-                    foreach ($accountData["result"]["keys"] as $key) {
-                        $output[] = "- " . $key["public_key"] . " (" . $key["access_key"]["permission"] . ", nonce: " . $key["access_key"]["nonce"] . ")";
+                    if (!$accountData["result"]["keys"])
+                        $output[] = "[locked account]";
+                    else {
+                        foreach ($accountData["result"]["keys"] as $key) {
+                            $output[] = "- " . $key["public_key"] . " (" . $key["access_key"]["permission"] . ", nonce: " . $key["access_key"]["nonce"] . ")";
+                        }
                     }
 
                     $reply = join(chr(10), $output);

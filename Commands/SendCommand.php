@@ -110,8 +110,6 @@ class SendCommand extends UserCommand
 
                         $reply = shell_exec("cd " . Config::$nodejs_folder . "; node sendMoney.js $nearLogin $nearPrivateKey $recipient $amount 2>&1");
 
-
-
                         $errorPosition =strpos( $reply, "Error: ");
                         if($errorPosition> -1){
                             $reply =  substr($reply, $errorPosition,(strpos($reply, "\n") - $errorPosition));

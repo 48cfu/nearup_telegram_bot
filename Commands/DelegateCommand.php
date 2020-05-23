@@ -71,7 +71,7 @@ class DelegateCommand extends UserCommand
                         $notes['state'] = 0;
                         $this->conversation->update();
 
-                        $data['text'] = "Please enter name of the staking pool contract (for example: node)";
+                        $data['text'] = "Please enter the name of your staking pool contract (for example: node)";
                         Request::sendMessage($data);
                     }
 
