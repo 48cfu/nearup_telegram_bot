@@ -27,11 +27,11 @@ class CheckBalanceCommand extends MyCommand
             if (isset($accountData["error"]))
                 $reply = $accountData["error"]["message"] . " " . $accountData["error"]["data"];
             else {
-                $output[] = "{$this->strings['account']} *{%0%}*";
-                $output[] = "{$this->strings['balance']}: `{%1%} NEAR`";
-                $output[] = "{$this->strings['locked']}: `{%2%} NEAR`";
-                $output[] = "{$this->strings['storageUsage']}: `{%3%}`";
-                $output[] = "{$this->strings['accessKeysList']}: /ViewAccessKey\_{%4%}";
+                $output = ["{$this->strings['account']} *{%0%}*",
+                    "{$this->strings['balance']}: `{%1%} NEAR`",
+                    "{$this->strings['locked']}: `{%2%} NEAR`",
+                    "{$this->strings['storageUsage']}: `{%3%}`",
+                    "{$this->strings['accessKeysList']}: /ViewAccessKey\_{%4%}"];
 
                 $publicKey = NearData::GetPublicKey($pdo, $this->user_id);
                 if ($publicKey)

@@ -2,20 +2,24 @@
   "general": {
     "account": "Аккаунт",
     "balance": "Баланс",
-    "accountNotFound":  "Аккаунт не найден",
+    "accountNotFound": "Аккаунт не найден",
     "notFound": "Данные не найдены",
     "result": "Результат",
     "wrongData": "Ошиюка данных",
-    "validatorsLegend": "Примечание: ⚠ - риск блокировки (число произведенных блоков / число ожидаемых блоков)"
+    "nonce": "Код",
+    "validatorsLegend": "Примечание: ⚠ - риск блокировки (число произведенных блоков / число ожидаемых блоков)",
+    "pleaseEnterNearAccountName": "Пожалуйста введите имя от NEAR аккаунта",
+    "lockedAccount": "Аккаунт заблокирован",
+    "accountAccessKeys": "Ключи доступа для аккаунта",
+    "locked": "Заблокировано",
+    "storageUsage": "Использование хранилища",
+    "accessKeysList": "Список ключей доступа"
   },
   "about": {
-    "title":  "Near Shell Bot",
+    "title": "Near Shell Bot",
     "pleaseContribute": "Присоединяйтесь к разработке: https://github.com/zavodil/nearup_telegram_bot"
   },
   "checkBalance": {
-    "locked": "Заблокировано",
-    "storageUsage": "Использование хранилища",
-    "accessKeysList": "Список ключей доступа",
     "associatedPublicKey": "Привязанный к боту публичный ключ"
   },
   "convert": {
@@ -23,7 +27,7 @@
     "pleaseEnterAmountToConvert": "Укажите количество токенов для конвертации"
   },
   "currentFishermen": {
-    "currentFishermen" : "Текущие ловцы (fishermen)"
+    "currentFishermen": "Текущие ловцы (fishermen)"
   },
   "currentProposals": {
     "currentProposals": "Текущие предложения"
@@ -36,5 +40,14 @@
   },
   "nextFishermen": {
     "nextFishermen": "Следующие ловцы (fishermen)"
+  },
+  "getKickouts": {
+    "title": "Подвергшиеся блокировке в прошлой эпохе",
+    "notEnoughBlocks": "Недостаточно блоков",
+    "produced": "Произведено",
+    "notEnoughStake": "Недостаточный размер сейка"
+  },
+  "seatPrice": {
+    "title": "Текущая цена места валидатора"
   }
 }

@@ -6,16 +6,20 @@
     "notFound": "Not found",
     "result": "Result",
     "wrongData": "Wrong data",
-    "validatorsLegend": "Legend: ⚠ - kickout risk (produced blocks / expected blocks)"
+    "nonce": "Nonce",
+    "validatorsLegend": "Legend: ⚠ - kickout risk (produced blocks / expected blocks)",
+    "pleaseEnterNearAccountName": "Please enter NEAR account name",
+    "lockedAccount": "Locked account",
+    "accountAccessKeys": "Account Access Keys",
+    "locked": "Locked",
+    "storageUsage": "Storage Usage",
+    "accessKeysList": "Access Keys List"
   },
   "about": {
     "title": "Near Shell Bot",
     "pleaseContribute": "Fill free to contribute: https://github.com/zavodil/nearup_telegram_bot"
   },
   "checkBalance": {
-    "locked": "Locked",
-    "storageUsage": "Storage Usage",
-    "accessKeysList": "Access Keys List",
     "associatedPublicKey": "Public key associated with bot"
   },
   "convert": {
@@ -36,5 +40,14 @@
   },
   "nextFishermen": {
     "nextFishermen": "Next Fishermen"
+  },
+  "getKickouts": {
+    "title": "Get kickouts",
+    "notEnoughBlocks": "Not Enough Blocks",
+    "produced": "Produced",
+    "notEnoughStake": "Not Enough Stake"
+  },
+  "seatPrice": {
+    "title": "Current Validator's Seat Price"
   }
 }

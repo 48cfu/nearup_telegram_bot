@@ -20,11 +20,11 @@ class MyCommand extends UserCommand
 
     protected $strings;
 
-    public function GetText()
+    public static function GetText($user, $commandName)
     {
         $json = null;
 
-        switch ($this->user->getLanguageCode()) {
+        switch ($user->getLanguageCode()) {
             case "ru":
                 $file = "ru";
                 break;
@@ -36,10 +36,13 @@ class MyCommand extends UserCommand
 
         $screenText = [];
 
-        if (isset($json, $this->name))
-            $screenText = $json[$this->name];
+        if (isset($json[$commandName]))
+            $screenText = $json[$commandName];
 
-        return array_merge($screenText, $json["general"]);
+        if ($screenText && is_array($screenText))
+            return array_merge($screenText, $json["general"]);
+        else
+            return $json["general"];
 
     }
 
@@ -53,7 +56,7 @@ class MyCommand extends UserCommand
         $this->user_id = $this->user->getId();
         $this->message_id = $this->message->getMessageId();
 
-        $this->strings = $this->GetText();
+        $this->strings = $this->GetText($this->user, $this->name);
     }
 
     public function GenerateOutput($message, $valuesArray = [])

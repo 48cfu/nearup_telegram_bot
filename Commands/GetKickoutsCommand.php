@@ -2,49 +2,43 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use Bot\Common;
-use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
-use Near\NearData;
 use Settings\Config;
-use Near\NearView;
 
-include_once __DIR__ . '/../bot.php';
-
-class GetKickoutsCommand extends UserCommand
+class GetKickoutsCommand extends MyCommand
 {
+    protected $name = 'getKickouts';
+    protected $description = 'Get Kickouts';
+    protected $usage = '/getKickouts';
+    protected $version = '1.0.0';
+
     public function execute()
     {
-        $message = $this->getMessage();
-        $chat_id = $message->getChat()->getId();
-        $user = $message->getFrom();
-        $user_id = $user->getId();
-
-        if(!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
+        parent::execute();
+        if (!$this->ValidateAccess())
             return false;
 
         $kickouts = shell_exec("cd " . Config::$nodejs_folder . "; node getKickouts.js 2>&1");
         $kickouts = json_decode($kickouts, true);
-        $output[] = "Previous epoch kickouts:";
+        $output[] = $this->strings['title'];
         foreach ($kickouts as $validator) {
-            $reply = $validator["account_id"].": ";
+            $reply = "*{$validator["account_id"]}*: ";
 
             $reason = $validator["reason"];
-            if(isset($reason["NotEnoughBlocks"])){
-                $reply .= "Not Enough Blocks. Produced ".$reason["NotEnoughBlocks"]["produced"]."/".$reason["NotEnoughBlocks"]["expected"];
-            }
-            else if(isset($reason["NotEnoughStake"])){
-                $reply .=  "Not Enough Stake."; //Stake ". NearData::RoundNearBalance($reason["NotEnoughStake"]["stake_u128"]).PHP_EOL;
-            }
-            else {
+            if (isset($reason["NotEnoughBlocks"])) {
+                $reply .= "{$this->strings["notEnoughBlocks"]}. {$this->strings["produced"]} `{$reason["NotEnoughBlocks"]["produced"]}/{$reason["NotEnoughBlocks"]["expected"]}`";
+            } else if (isset($reason["NotEnoughStake"])) {
+                $reply .= "{$this->strings['notEnoughStake']}.";
+            } else {
                 $reply .= $reason;
             }
             $output[] = $reply;
         }
 
         $data = [
-            'chat_id' => $chat_id,
-            'text' => join(chr(10), $output),
+            'chat_id' => $this->chat_id,
+            'text' => $this->GenerateOutput($output),
+            'parse_mode' => 'markdown'
         ];
 
         return Request::sendMessage($data);

@@ -3,6 +3,7 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Bot\Common;
 use Longman\TelegramBot\Commands\SystemCommand;
+use Longman\TelegramBot\Commands\UserCommands\MyCommand;
 use Longman\TelegramBot\Request;
 use Near\NearView;
 
@@ -23,6 +24,7 @@ class GenericCommand extends SystemCommand
         $text = trim($message->getText(false));
         $user = $message->getFrom();
         $user_id = $user->getId();
+        $strings = MyCommand::GetText($user, null);
 
         if (!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
             return false;
@@ -32,7 +34,7 @@ class GenericCommand extends SystemCommand
             $account = str_replace("_", ".", $account);
 
             if($account) {
-                $reply = NearView:: GetAccountDetails($account);
+                $reply = NearView:: GetAccountDetails($account, $strings);
                 $data = [
                     'chat_id' => $chat_id,
                     'text' => $reply,
@@ -45,10 +47,11 @@ class GenericCommand extends SystemCommand
             $account = str_replace("_", ".", $account);
 
             if($account) {
-                $reply = NearView:: GetAccountAccessKeysDetails($account);
+                $reply = NearView:: GetAccountAccessKeysDetails($account, $strings);
                 $data = [
                     'chat_id' => $chat_id,
                     'text' => $reply,
+                    'parse_mode' => 'markdown'
                 ];
                 return Request::sendMessage($data);
             }

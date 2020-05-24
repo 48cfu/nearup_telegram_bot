@@ -2,6 +2,7 @@
 
 namespace Near;
 
+use Longman\TelegramBot\Commands\UserCommands\MyCommand;
 use Settings\Config;
 use PDO;
 
@@ -192,55 +193,54 @@ Class NearView
         return $string;
     }
 
-    public static function GetAccountDetails($account){
+    public static function GetAccountDetails($account, $strings){
         if ($account) {
             $accountData = NearData::GetAccountBalance($account);
 
             if (isset($accountData["error"]))
                 $reply = $accountData["error"]["message"] . " " . $accountData["error"]["data"];
             else {
-                $reply = NearView::GetAccountDataDetails($account, $accountData["result"]);
+                $reply = NearView::GetAccountDataDetails($account, $accountData["result"], $strings);
             }
         }
         else
-            $reply = "Wrong data";
+            $reply = $strings["wrongData"];
 
         return $reply;
     }
 
-    public static function GetAccountDataDetails($account, $accountData)
+    public static function GetAccountDataDetails($account, $accountData, $strings)
     {
-        $output = [
-            "Account " . $account,
-            "Balance: " . NearData::RoundNearBalance($accountData["amount"]),
-            "Locked: " . NearData::RoundNearBalance($accountData["locked"]),
-            "Storage Usage: " . NearData::RoundNearBalance($accountData["storage_usage"]),
-            "Access Keys List: /ViewAccessKey_" . $account
-        ];
+        $output = ["{$strings['account']} *".strtoupper($account)."*",
+            "{$strings['balance']}: `". NearData::RoundNearBalance($accountData["amount"])." NEAR`",
+            "{$strings['locked']}: `". NearData::RoundNearBalance($accountData["locked"])." NEAR`",
+            "{$strings['storageUsage']}: `". NearData::RoundNearBalance($accountData["storage_usage"])."`",
+            "{$strings['accessKeysList']}: /ViewAccessKey\_". str_replace(".", "\_", $account)];
+
         return join(chr(10), $output);
     }
 
-    public static function GetAccountAccessKeysDetails($account){
+    public static function GetAccountAccessKeysDetails($account, $strings){
         if ($account) {
             $accountData = NearData::GetAccountAccessKeys($account);
 
             if (isset($accountData["error"]))
                 $reply = $accountData["error"]["message"] . " " . $accountData["error"]["data"];
             else {
-                $output[] = "Account " . $account;
+                $output[] = "{$strings["accountAccessKeys"]} *". strtoupper($account)."*";
                 if (!$accountData["result"]["keys"])
-                    $output[] = "[locked account]";
+                    $output[] = "\[{$strings["lockedAccount"]}]";
                 else {
                     foreach ($accountData["result"]["keys"] as $key) {
-                        $output[] = "- " . $key["public_key"] . " (" . $key["access_key"]["permission"] . ", nonce: " . $key["access_key"]["nonce"] . ")";
+                        $output[] = "`" . $key["public_key"] . " (" . $key["access_key"]["permission"] . ", {$strings["nonce"]}: " . $key["access_key"]["nonce"] . ")`";
                     }
                 }
 
-                $reply = join(chr(10), $output);
+                $reply =  join(PHP_EOL, $output);
             }
         }
         else
-            $reply = "Wrong data";
+            $reply = $strings['wrongData'];
 
         return $reply;
     }
