@@ -41,14 +41,16 @@ class StartCommand extends UserCommand
             $menu[] = "/login - Authorize this bot in your NEAR account";
 
         $menu = array_merge($menu, [
-            "/ViewAccount username - Account data",
-            "/SeatPrice - Minimal stake for validator",
-            "/CurrentValidators - Current Validators",
-            "/NextValidators - Next Validators",
-            "/CurrentProposals - Current Proposals",
+            "/viewAccount username - Account data",
+            "/viewAccessKey username - Account access keys",
+            "/seatPrice - Minimal stake for validator",
+            "/currentValidators - Current Validators",
+            "/nextValidators - Next Validators",
+            "/currentProposals - Current Proposals",
             // "/CurrentFishermen - CurrentFishermen",
             // "/NextFishermen - Next Fishermen",
-            "/GetKickouts - Previous epoch kickouts",
+            "/getKickouts - Previous epoch kickouts",
+            "/convert - Convert NEAR <-> yoctoNEAR",
             "/about - About bot"
         ]);
 

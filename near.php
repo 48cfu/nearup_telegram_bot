@@ -40,6 +40,15 @@ Class NearData
         return (round($amount / 1000000000000000000000000));
     }
 
+    public static function ConvertNearToYoctoNear($amount)
+    {
+        if(intval($amount) > 0)
+            return $amount . "000000000000000000000000";
+        else
+            return "";
+    }
+
+
     public static function InitializeDB($table_prefix = null, $encoding = 'utf8mb4')
     {
         $credentials = Config::$mysql_credentials;
@@ -174,6 +183,59 @@ Class NearView
 
         if ($alertFound)
             $reply .= "Legend: ⚠️ - kickout risk (produced blocks / expected blocks)";
+
+        return $reply;
+    }
+
+    public static function GetAccountDetails($account){
+        if ($account) {
+            $accountData = NearData::GetAccountBalance($account);
+
+            if (isset($accountData["error"]))
+                $reply = $accountData["error"]["message"] . " " . $accountData["error"]["data"];
+            else {
+                $reply = NearView::GetAccountDataDetails($account, $accountData["result"]);
+            }
+        }
+        else
+            $reply = "Wrong data";
+
+        return $reply;
+    }
+
+    public static function GetAccountDataDetails($account, $accountData)
+    {
+        $output = [
+            "Account " . $account,
+            "Balance: " . NearData::RoundNearBalance($accountData["amount"]),
+            "Locked: " . NearData::RoundNearBalance($accountData["locked"]),
+            "Storage Usage: " . NearData::RoundNearBalance($accountData["storage_usage"]),
+            "Access Keys List: /ViewAccessKey_" . $account
+        ];
+        return join(chr(10), $output);
+    }
+
+    public static function GetAccountAccessKeysDetails($account){
+        if ($account) {
+            $accountData = NearData::GetAccountAccessKeys($account);
+
+            if (isset($accountData["error"]))
+                $reply = $accountData["error"]["message"] . " " . $accountData["error"]["data"];
+            else {
+                $output[] = "Account " . $account;
+                if (!$accountData["result"]["keys"])
+                    $output[] = "[locked account]";
+                else {
+                    foreach ($accountData["result"]["keys"] as $key) {
+                        $output[] = "- " . $key["public_key"] . " (" . $key["access_key"]["permission"] . ", nonce: " . $key["access_key"]["nonce"] . ")";
+                    }
+                }
+
+                $reply = join(chr(10), $output);
+            }
+        }
+        else
+            $reply = "Wrong data";
 
         return $reply;
     }

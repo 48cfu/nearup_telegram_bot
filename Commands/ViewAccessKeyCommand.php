@@ -5,52 +5,82 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Bot\Common;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
-use Near\NearData;
+use Longman\TelegramBot\Conversation;
+use Near\NearView;
 
 include_once __DIR__ . '/../bot.php';
 include_once __DIR__ . '/../near.php';
 
 class ViewAccessKeyCommand extends UserCommand
 {
+    protected $name = 'viewAccessKey';
+    protected $description = 'View Access Key';
+    protected $usage = '/viewAccessKey';
+    protected $version = '1.0.0';
+
+    protected $conversation;
+
     public function execute()
     {
         $message = $this->getMessage();
-        $chat_id = $message->getChat()->getId();
+        $chat = $message->getChat();
+        $chat_id = $chat->getId();
+        $text = trim($message->getText(true));
+        $text_full = trim($message->getText(false));
         $user = $message->getFrom();
         $user_id = $user->getId();
 
         if (!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
             return false;
 
-        $paramPosition = strpos($message->text, " ");
-        if ($paramPosition > -1) {
-            $account = substr($message->text, $paramPosition + 1);
-            if ($account) {
-                $accountData = NearData:: GetAccountAccessKeys($account);
-
-                if (isset($accountData["error"]))
-                    $reply = $accountData["error"]["message"] . " " . $accountData["error"]["data"];
-                else {
-                    $output[] = "Account " . $account;
-                    if (!$accountData["result"]["keys"])
-                        $output[] = "[locked account]";
-                    else {
-                        foreach ($accountData["result"]["keys"] as $key) {
-                            $output[] = "- " . $key["public_key"] . " (" . $key["access_key"]["permission"] . ", nonce: " . $key["access_key"]["nonce"] . ")";
-                        }
-                    }
-
-                    $reply = join(chr(10), $output);
-                }
-            }
-        } else
-            $reply = "Account now found. Usage: /ViewAccessKey username" . $paramPosition;
-
         $data = [
             'chat_id' => $chat_id,
-            'text' => $reply,
         ];
 
-        return Request::sendMessage($data);
+        if ($chat->isGroupChat() || $chat->isSuperGroup()) {
+            $data['reply_markup'] = Keyboard::forceReply(['selective' => true]);
+        }
+
+        $this->conversation = new Conversation($user_id, $chat_id, $this->getName());
+
+        $notes = &$this->conversation->notes;
+        !is_array($notes) && $notes = [];
+
+        $state = 0;
+        if (isset($notes['state'])) {
+            $state = $notes['state'];
+        }
+
+        $result = Request::emptyResponse();
+
+        switch ($state) {
+            case 0:
+                if ($text === '') {
+                    $paramPosition = strpos($text_full, " ");
+                    if ($paramPosition > -1) {
+                        $account = substr($text_full, $paramPosition + 1);
+                        $data['text'] = NearView:: GetAccountAccessKeysDetails($account);
+                        Request::sendMessage($data);
+
+                        $this->conversation->stop();
+                        break;
+                    } else {
+                        $notes['state'] = 0;
+                        $this->conversation->update();
+                        $data['text'] = "Please enter NEAR account name";
+                        Request::sendMessage($data);
+                    }
+                }
+                $notes['account'] = $text;
+                $text = '';
+
+            case 1:
+                if ($text === '' && $notes['account']) {
+                    $data['text'] = NearView:: GetAccountAccessKeysDetails($notes['account']);
+                    $result = Request::sendMessage($data);
+                    $this->conversation->stop();
+                }
+        }
+        return $result;
     }
 }
