@@ -20,8 +20,8 @@ class AboutCommand extends MyCommand
         $data = [
             'chat_id' => $this->chat_id,
             'text' => $this->GenerateOutput([
-                $this->text['title'],
-                $this->text['pleaseContribute']
+                $this->strings['title'],
+                $this->strings['pleaseContribute']
             ]),
         ];
 

@@ -29,6 +29,7 @@ class GenericCommand extends SystemCommand
 
         if (stripos($command_lower, 'viewaccount_') === 0) {
             $account = substr($text, strpos($text, "_") + 1);
+            $account = str_replace("_", ".", $account);
 
             if($account) {
                 $reply = NearView:: GetAccountDetails($account);
@@ -41,6 +42,7 @@ class GenericCommand extends SystemCommand
         }
         else  if (stripos($command_lower, 'viewaccesskey_') === 0) {
             $account = substr($text, strpos($text, "_") + 1);
+            $account = str_replace("_", ".", $account);
 
             if($account) {
                 $reply = NearView:: GetAccountAccessKeysDetails($account);

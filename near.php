@@ -158,10 +158,10 @@ Class NearData
 
 Class NearView
 {
-    public static function FormatValidators($validators)
+    public static function FormatValidators($validators, $strings)
     {
         if (!is_array($validators) || !count($validators))
-            return "Not found";
+            return $strings["notFound"];
 
         usort($validators, function ($a, $b) {
             return strcmp($a["account_id"], $b["account_id"]);
@@ -174,17 +174,22 @@ Class NearView
 
         foreach ($validators as $validator) {
             $alert = "";
-            if ($validator["num_produced_blocks"] < ($validator["num_expected_blocks"] * 0.9)) {
-                $alert = " ⚠️ (" . $validator["num_produced_blocks"] . "/" . $validator["num_expected_blocks"] . ")";
+            if (isset($validator["num_produced_blocks"]) && isset($validator["num_expected_blocks"]) && $validator["num_produced_blocks"] < ($validator["num_expected_blocks"] * 0.9)) {
+                $alert = " ⚠️ `(" . $validator["num_produced_blocks"] . "/" . $validator["num_expected_blocks"] . ")`";
                 $alertFound = true;
             }
-            $reply .= (str_pad($i++, $validatorPositionsQuantity, "0", STR_PAD_LEFT)) . ". " . $validator["account_id"] . ": " . NearData::RoundNearBalance($validator["stake"]) . " NEAR" . $alert . chr(10);
+            $reply .= (str_pad($i++, $validatorPositionsQuantity, "0", STR_PAD_LEFT)) . ". " . NearView::EscapeMarkdownCharacters($validator["account_id"]) . ": `" . NearData::RoundNearBalance($validator["stake"]) . " NEAR`" . $alert . "\n";
         }
 
         if ($alertFound)
-            $reply .= "Legend: ⚠️ - kickout risk (produced blocks / expected blocks)";
+            $reply .= $strings['validatorsLegend'];
 
         return $reply;
+    }
+
+    public static function EscapeMarkdownCharacters($string){
+        $string = str_replace("_", "\_", $string);
+        return $string;
     }
 
     public static function GetAccountDetails($account){

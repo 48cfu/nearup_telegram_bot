@@ -2,7 +2,11 @@
   "general": {
     "account": "Аккаунт",
     "balance": "Баланс",
-    "accountNotFound":  "Аккаунт не найден"
+    "accountNotFound":  "Аккаунт не найден",
+    "notFound": "Данные не найдены",
+    "result": "Результат",
+    "wrongData": "Ошиюка данных",
+    "validatorsLegend": "Примечание: ⚠ - риск блокировки (число произведенных блоков / число ожидаемых блоков)"
   },
   "about": {
     "title":  "Near Shell Bot",
@@ -13,5 +17,24 @@
     "storageUsage": "Использование хранилища",
     "accessKeysList": "Список ключей доступа",
     "associatedPublicKey": "Привязанный к боту публичный ключ"
+  },
+  "convert": {
+    "pleaseChooseConvertDirection": "Выберете направленеи конвертации",
+    "pleaseEnterAmountToConvert": "Укажите количество токенов для конвертации"
+  },
+  "currentFishermen": {
+    "currentFishermen" : "Текущие ловцы (fishermen)"
+  },
+  "currentProposals": {
+    "currentProposals": "Текущие предложения"
+  },
+  "currentValidators": {
+    "currentValidators": "Текущие валидаторы"
+  },
+  "nextValidators": {
+    "nextValidators": "Следующие валидаторы"
+  },
+  "nextFishermen": {
+    "nextFishermen": "Следующие ловцы (fishermen)"
   }
 }

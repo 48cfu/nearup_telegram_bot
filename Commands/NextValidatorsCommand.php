@@ -2,36 +2,31 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use Bot\Common;
-use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 use Near\NearData;
 use Near\NearView;
 
-include_once __DIR__ . '/../bot.php';
-
-include_once __DIR__ . '/../near.php';
-
-
-class NextValidatorsCommand extends UserCommand
+class NextValidatorsCommand extends MyCommand
 {
+    protected $name = 'nextValidators';
+    protected $description = 'Get Next Validators';
+    protected $usage = '/nextValidators';
+    protected $version = '1.0.0';
+
     public function execute()
     {
-        $message = $this->getMessage();
-        $chat_id = $message->getChat()->getId();
-        $user = $message->getFrom();
-        $user_id = $user->getId();
-
-        if(!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
+        parent::execute();
+        if (!$this->ValidateAccess())
             return false;
 
         $validatorsData = NearData::GetNearRpcData("validators");
 
-        $reply = "Next Validators:" . chr(10) . NearView::FormatValidators($validatorsData['result']['next_validators']);
+        $reply = "{$this->strings['nextValidators']} \n {$this->GenerateOutput(NearView::FormatValidators($validatorsData['result']['next_validators'],  $this->strings))}";
 
         $data = [
-            'chat_id' => $chat_id,
+            'chat_id' => $this->chat_id,
             'text' => $reply,
+            'parse_mode' => 'markdown',
         ];
 
         return Request::sendMessage($data);

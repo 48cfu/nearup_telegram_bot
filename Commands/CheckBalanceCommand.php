@@ -27,27 +27,27 @@ class CheckBalanceCommand extends MyCommand
             if (isset($accountData["error"]))
                 $reply = $accountData["error"]["message"] . " " . $accountData["error"]["data"];
             else {
-                $output[] = "{$this->text['account']} *{%0%}*";
-                $output[] = "{$this->text['balance']}: `{%1%} NEAR`";
-                $output[] = "{$this->text['locked']}: `{%2%} NEAR`";
-                $output[] = "{$this->text['storageUsage']}: `{%3%}`";
-                $output[] = "{$this->text['accessKeysList']}: /ViewAccessKey\_{%4%}";
+                $output[] = "{$this->strings['account']} *{%0%}*";
+                $output[] = "{$this->strings['balance']}: `{%1%} NEAR`";
+                $output[] = "{$this->strings['locked']}: `{%2%} NEAR`";
+                $output[] = "{$this->strings['storageUsage']}: `{%3%}`";
+                $output[] = "{$this->strings['accessKeysList']}: /ViewAccessKey\_{%4%}";
 
                 $publicKey = NearData::GetPublicKey($pdo, $this->user_id);
                 if ($publicKey)
-                    $output[] = $this->text['associatedPublicKey'] . " `{%5%}`";
+                    $output[] = $this->strings['associatedPublicKey'] . " `{%5%}`";
 
                 $reply = $this->GenerateOutput($output, [
                     strtoupper($account),
                     NearData::RoundNearBalance($accountData["result"]["amount"]),
                     NearData::RoundNearBalance($accountData["result"]["locked"]),
                     NearData::RoundNearBalance($accountData["result"]["storage_usage"]),
-                    $account,
+                    str_replace(".", "\_", $account),
                     $publicKey
                 ]);
             }
         } else
-            $reply = $this->text['accountNotFound'];
+            $reply = $this->strings['accountNotFound'];
 
         $data = [
             'chat_id' => $this->chat_id,

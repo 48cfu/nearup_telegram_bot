@@ -2,10 +2,14 @@
   "general": {
     "account": "Account",
     "balance": "Balance",
-    "accountNotFound":  "Account not found"
+    "accountNotFound": "Account not found",
+    "notFound": "Not found",
+    "result": "Result",
+    "wrongData": "Wrong data",
+    "validatorsLegend": "Legend: ⚠ - kickout risk (produced blocks / expected blocks)"
   },
   "about": {
-    "title":  "Near Shell Bot",
+    "title": "Near Shell Bot",
     "pleaseContribute": "Fill free to contribute: https://github.com/zavodil/nearup_telegram_bot"
   },
   "checkBalance": {
@@ -13,5 +17,24 @@
     "storageUsage": "Storage Usage",
     "accessKeysList": "Access Keys List",
     "associatedPublicKey": "Public key associated with bot"
+  },
+  "convert": {
+    "pleaseChooseConvertDirection": "Please choose convert direction",
+    "pleaseEnterAmountToConvert": "Please enter the amount to convert"
+  },
+  "currentFishermen": {
+    "currentFishermen": "Current Fishermen"
+  },
+  "currentProposals": {
+    "currentProposals": "Current Proposals"
+  },
+  "currentValidators": {
+    "currentValidators": "Current Validators"
+  },
+  "nextValidators": {
+    "nextValidators": "Next Validators"
+  },
+  "nextFishermen": {
+    "nextFishermen": "Next Fishermen"
   }
 }
