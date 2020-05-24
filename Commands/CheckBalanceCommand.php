@@ -2,28 +2,24 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use Bot\Common;
-use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Request;
 use Near\NearData;
+use Longman\TelegramBot\Request;
 
-include_once __DIR__ . '/../bot.php';
-include_once __DIR__ . '/../near.php';
-
-class CheckBalanceCommand extends UserCommand
+class CheckBalanceCommand extends MyCommand
 {
+    protected $name = 'checkBalance';
+    protected $description = 'Check Balance';
+    protected $usage = '/checkBalance';
+    protected $version = '1.0.0';
+
     public function execute()
     {
-        $message = $this->getMessage();
-        $chat_id = $message->getChat()->getId();
-        $user = $message->getFrom();
-        $user_id = $user->getId();
-
-        if(!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
+        parent::execute();
+        if (!$this->ValidateAccess())
             return false;
 
         $pdo = NearData::InitializeDB();
-        $account = NearData::GetUserLogin($pdo, $user_id);
+        $account = NearData::GetUserLogin($pdo, $this->user_id);
 
         if ($account) {
             $accountData = NearData::GetAccountBalance($account);
@@ -31,26 +27,32 @@ class CheckBalanceCommand extends UserCommand
             if (isset($accountData["error"]))
                 $reply = $accountData["error"]["message"] . " " . $accountData["error"]["data"];
             else {
-                $output = [
-                    "Account " . $account,
-                    "Balance: " . NearData::RoundNearBalance($accountData["result"]["amount"]),
-                    "Locked: " . NearData::RoundNearBalance($accountData["result"]["locked"]),
-                    "Storage Usage: " . NearData::RoundNearBalance($accountData["result"]["storage_usage"]),
-                    "Access Keys List: /ViewAccessKey " . $account
-                ];
+                $output[] = "{$this->text['account']} *{%0%}*";
+                $output[] = "{$this->text['balance']}: `{%1%} NEAR`";
+                $output[] = "{$this->text['locked']}: `{%2%} NEAR`";
+                $output[] = "{$this->text['storageUsage']}: `{%3%}`";
+                $output[] = "{$this->text['accessKeysList']}: /ViewAccessKey\_{%4%}";
 
-                $publicKey= NearData::GetPublicKey($pdo, $user_id);
-                if($publicKey)
-                    $output[] = "Associated Public key $publicKey";
+                $publicKey = NearData::GetPublicKey($pdo, $this->user_id);
+                if ($publicKey)
+                    $output[] = $this->text['associatedPublicKey'] . " `{%5%}`";
 
-                $reply = join(chr(10), $output);
+                $reply = $this->GenerateOutput($output, [
+                    strtoupper($account),
+                    NearData::RoundNearBalance($accountData["result"]["amount"]),
+                    NearData::RoundNearBalance($accountData["result"]["locked"]),
+                    NearData::RoundNearBalance($accountData["result"]["storage_usage"]),
+                    $account,
+                    $publicKey
+                ]);
             }
         } else
-            $reply = "Account now found";
+            $reply = $this->text['accountNotFound'];
 
         $data = [
-            'chat_id' => $chat_id,
+            'chat_id' => $this->chat_id,
             'text' => $reply,
+            'parse_mode' => 'markdown',
         ];
 
         return Request::sendMessage($data);

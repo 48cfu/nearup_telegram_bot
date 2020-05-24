@@ -2,11 +2,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use Bot\Common;
 use Longman\TelegramBot\Request;
-
-include_once __DIR__ . '/../bot.php';
-include_once __DIR__ . '/../command.php';
 
 class AboutCommand extends MyCommand
 {
@@ -18,19 +14,15 @@ class AboutCommand extends MyCommand
     public function execute()
     {
         parent::execute();
-
-        $text = $this->GetText();
-
         if (!$this->ValidateAccess())
             return false;
 
-        $output = [
-            $text['title'],
-            $text['pleaseContribute']
-        ];
         $data = [
             'chat_id' => $this->chat_id,
-            'text' => $this->GenerateOutput($output),
+            'text' => $this->GenerateOutput([
+                $this->text['title'],
+                $this->text['pleaseContribute']
+            ]),
         ];
 
         return Request::sendMessage($data);

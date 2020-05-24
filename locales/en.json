@@ -1,6 +1,17 @@
 {
+  "general": {
+    "account": "Account",
+    "balance": "Balance",
+    "accountNotFound":  "Account not found"
+  },
   "about": {
     "title":  "Near Shell Bot",
     "pleaseContribute": "Fill free to contribute: https://github.com/zavodil/nearup_telegram_bot"
+  },
+  "checkBalance": {
+    "locked": "Locked",
+    "storageUsage": "Storage Usage",
+    "accessKeysList": "Access Keys List",
+    "associatedPublicKey": "Public key associated with bot"
   }
 }

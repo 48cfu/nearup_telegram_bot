@@ -10,8 +10,9 @@ class MyCommand extends UserCommand
 {
     protected $name;
 
-    public $message;
-    public $user;
+    protected $message;
+    protected $user;
+    protected $text;
 
     protected $chat_id;
     protected $user_id;
@@ -30,10 +31,13 @@ class MyCommand extends UserCommand
 
         $json = json_decode(file_get_contents("locales/$file.json"), true);
 
+        $screenText = [];
+
         if(isset($json, $this->name))
-            return $json[$this->name];
-        else
-            return [];
+            $screenText = $json[$this->name];
+
+        return array_merge($screenText, $json["general"]);
+
     }
 
     public function execute()
@@ -41,13 +45,21 @@ class MyCommand extends UserCommand
         $this->message = $this->getMessage();
         $this->user =  $this->message->getFrom();
 
+        $this->text = $this->GetText();
+
         $this->chat_id = $this->message->getChat()->getId();
         $this->user_id = $this->user->getId();
         $this->message_id =  $this->message->getMessageId();
     }
 
-    public function GenerateOutput($messagesArray){
-        return join(chr(10), $messagesArray);
+    public function GenerateOutput($message, $valuesArray = []){
+        if(is_array($message))
+            $message = join(chr(10), $message);
+
+        for($i=0; $i<count($valuesArray); $i++)
+            $message = str_replace("{%$i%}", $valuesArray[$i], $message);
+
+        return $message;
     }
 
     public function ValidateAccess(){

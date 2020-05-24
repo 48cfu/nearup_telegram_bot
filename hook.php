@@ -2,6 +2,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 require __DIR__ . '/settings.php';
+require __DIR__ . '/command.php';
 
 use Settings\Config;
 
