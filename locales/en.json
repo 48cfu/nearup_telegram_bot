@@ -15,13 +15,35 @@
     "locked": "Locked",
     "storageUsage": "Storage Usage",
     "accessKeysList": "Access Keys List",
-    "telegramAccountNotAuthorized": "You didn't authorize current telegram account with the NEAR account. Please click /login to proceed",
+    "telegramAccountNotAuthorized": "You didn't authorize the current telegram account with the NEAR account. Please click /login to proceed",
     "invalidKey": "Invalid Key",
     "YES": "YES",
     "NO": "NO",
     "commandNotFound": "Command /{%0%} not found. Please /start again",
     "nearAccountSuccessfullyRemoved": "NEAR account {%0%} successfully removed from your current telegram account. Continue with the command /start",
     "loginWasntFound": "Login wasn't found"
+  },
+  "start": {
+    "title": "NearUp Bot (Betanet edition)",
+    "accountInfo": "*NEAR wallet operations*. \nCurrent NEAR account",
+    "checkBalance": "Check Balance",
+    "delegate": "Delegate to staking-pool",
+    "send": "Send tokens to NEAR account",
+    "sendTelegram": "Send tokens to Telegram account",
+    "deleteKey": "Delete access Key from your NEAR account",
+    "login": "Authorize this bot in your NEAR account to *delegate* and send your tokens",
+    "validatorOperations": "Validator Operations / Stake Wars",
+    "accountData": "View NEAR account data",
+    "accountAccessKeys": "Account access keys",
+    "minimalStakeValidator": "Minimal stake for validator",
+    "currentValidators": "Current Validators",
+    "nextValidators": "Next Validators",
+    "currentProposals": "Current Proposals",
+    "previousEpochKickouts": "Previous epoch kickouts",
+    "convertNEARyoctoNEAR": "Convert NEAR & yoctoNEAR",
+    "aboutBot": "About bot",
+    "logout": "Remove NEAR account from your telegram account",
+    "blockchainData": "Blockchain Data"
   },
   "about": {
     "title": "Near Shell Bot",
@@ -74,8 +96,8 @@
     "alreadyAuthorized": "You already authorized current telegram account with the NEAR account",
     "pleaseAuthorizeByUrl":"Please authorize this bot in your NEAR account by following the URL: {%0%}.\nYou may easily revoke access at any time",
     "whichAccountUsed":"Which NEAR account did you use?",
-    "associatedCurrentTelegramWithNearAccount": "You associated current telegram account with the NEAR account {%0%}. Now you can /send or /delegate NEAR tokens.",
-    "youDidntAuthorize":  "You didn't authorize this bot to work with NEAR account",
+    "associatedCurrentTelegramWithNearAccount": "You associated the current telegram account with the NEAR account {%0%}. Now you can /send or /delegate NEAR tokens.",
+    "youDidntAuthorize": "You didn't authorize this bot to work with NEAR account",
     "pleaseTryAgainByClickingLogin": "Please try again by clicking /login"
   }
 }

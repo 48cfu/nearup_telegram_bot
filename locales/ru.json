@@ -5,7 +5,7 @@
     "accountNotFound": "Аккаунт не найден",
     "notFound": "Данные не найдены",
     "result": "Результат",
-    "wrongData": "Ошиюка данных",
+    "wrongData": "Ошибка данных",
     "nonce": "Код",
     "validatorsLegend": "Примечание: ⚠ - риск блокировки (число произведенных блоков / число ожидаемых блоков)",
     "pleaseEnterNearAccountName": "Пожалуйста введите имя от NEAR аккаунта",
@@ -20,8 +20,30 @@
     "YES": "ДА",
     "NO": "НЕТ",
     "commandNotFound": "Команда /{%0%} не найдена. Нажмите /start для продолжения",
-    "nearAccountSuccessfullyRemoved": "NEAR аккаунт {%0%} теперь не связан с данным телеграм-аккаунтом. Нажмите /start для продолжения",
+    "nearAccountSuccessfullyRemoved": "NEAR аккаунт {%0%} теперь не связан с данным Telegram-аккаунтом. Нажмите /start для продолжения",
     "loginWasntFound": "Логин не был найден"
+  },
+  "start": {
+    "title": "NearUp Bot (Betanet версия)",
+    "accountInfo": "*Операции для работы с вашим аккаунтом NEAR*\nПодключен NEAR аккаунт",
+    "checkBalance": "Проверить баланс",
+    "delegate": "Делегировать на контракт стейкинг-пула",
+    "send": "Отправить токены на аккаунт NEAR",
+    "sendTelegram": "Отправить токены на аккаунт Telegram",
+    "deleteKey": "Удалить ключи доступа из вашего аккаунта NEAR",
+    "login": "Авторизация этого бота в вашем аккаунте NEAR, что дает возможность *делегировать* и отправлять ваши токены",
+    "validatorOperations": "Операции для валидаторов / Stake Wars",
+    "accountData": "Просмотреть данные аккаунта NEAR",
+    "accountAccessKeys": "Просмотреть ключи доступа аккаунта NEAR",
+    "minimalStakeValidator": "Размер минимального стейка для валидаторов",
+    "currentValidators": "Текущие валидаторы",
+    "nextValidators": "Будущие валидаторы",
+    "currentProposals": "Текущие предложения",
+    "previousEpochKickouts": "Блокировки прошлой эпохи",
+    "convertNEARyoctoNEAR": "Конвертация NEAR и yoctoNEAR",
+    "aboutBot": "Информация о боте",
+    "logout": "Удалить связь NEAR-аккаунта c Telegram-аккаунтом",
+    "blockchainData": "Данные блокчейна NEAR"
   },
   "about": {
     "title": "Near Shell Bot",
@@ -31,7 +53,7 @@
     "associatedPublicKey": "Привязанный к боту публичный ключ"
   },
   "convert": {
-    "pleaseChooseConvertDirection": "Выберете направленеи конвертации",
+    "pleaseChooseConvertDirection": "Выберете направление конвертации",
     "pleaseEnterAmountToConvert": "Укажите количество токенов для конвертации"
   },
   "currentFishermen": {
@@ -63,19 +85,19 @@
     "howManyTokensDelegate": "Сколько токенов NEAR вы хотите отдать в делегирование на контракт"
   },
   "deleteKey": {
-    "yourCurrentAccessKeys" : "Ваши текущие ключи доступа",
-    "sendPublicKeyOrIndex": "Пожалуйста пришлие публичный ключ или индекс ключа из списка выше, чтобы удалить его из своего аккаунта",
+    "yourCurrentAccessKeys": "Ваши текущие ключи доступа",
+    "sendPublicKeyOrIndex": "Пожалуйста, пришлите публичный ключ или индекс ключа из списка выше, чтобы удалить его из своего аккаунта",
     "areYouReadyToRemove": "Вы действительно хотите удалить ключ {%0%} из аккаунта {%1%}?",
-    "thisWillAlsoDeleteTelegram": "Это действие также разорвет связь телерам-бота с вашим аккаунтом",
+    "thisWillAlsoDeleteTelegram": "Это действие также разорвет связь Telegram-бота с вашим аккаунтом",
     "exitTryAgain": "Выход. Начните заново с помощью команды /deleteKey",
     "telegramBotKey": "Ключ, связанный с данным Telegram"
   },
   "login": {
     "alreadyAuthorized": "Вы уже авторизовали данный Telegram-аккаунт со своим аккаунтом в NEAR",
-    "pleaseAuthorizeByUrl":"Пожалуйста, авторизуйте данного бота в своем аккунте NEAR, пройдя по ссылке: {%0%}.\nВы легко можете удалить эту привязку в любое время",
-    "whichAccountUsed":"Какой NEAR-аккаунт вы использовали?",
+    "pleaseAuthorizeByUrl": "Пожалуйста, авторизуйте данного бота в своем аккаунте NEAR, пройдя по ссылке: {%0%}.\nВы легко можете удалить эту привязку в любое время",
+    "whichAccountUsed": "Какой NEAR-аккаунт вы использовали?",
     "associatedCurrentTelegramWithNearAccount": "Вы связали данный телеграм аккаунт со свои NEAR-аккаунтом {%0%}. Теперь вы можете отправлять (/send) и делегировать (/delegate) токены NEAR.",
-    "youDidntAuthorize":  "ВЫ не авторизовали данного телеграм-бота в NEAR-аккаунте ",
-    "pleaseTryAgainByClickingLogin": "Пожалуйста, попробуйте зановго, нажав на /login"
+    "youDidntAuthorize": "ВЫ не авторизовали данного телеграм-бота в NEAR-аккаунте ",
+    "pleaseTryAgainByClickingLogin": "Пожалуйста, попробуйте заново, нажав на /login"
   }
 }

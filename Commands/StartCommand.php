@@ -4,12 +4,10 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 
 include_once __DIR__ . '/../bot.php';
 
-use Bot\Common;
-use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 use Near\NearData;
 
-class StartCommand extends UserCommand
+class StartCommand extends MyCommand
 {
     protected $name = 'start';
     protected $description = 'Welcome Screen';
@@ -18,48 +16,46 @@ class StartCommand extends UserCommand
 
     public function execute()
     {
-        $message = $this->getMessage();
-        $user = $message->getFrom();
-        $user_id = $user->getId();
-        $chat_id = $message->getChat()->getId();
-
-        if(!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
+        parent::execute();
+        if (!$this->ValidateAccess())
             return false;
 
         $pdo = NearData::InitializeDB();
-        $nearLogin = NearData::GetUserLogin($pdo, $user_id);
+        $nearLogin = NearData::GetUserLogin($pdo, $this->user_id);
 
-        $menu[] = "Near Shell Betanet Bot";
+        $menu[] = $this->strings["title"];
         if ($nearLogin) {
-            $menu[] = "Your current Near account: $nearLogin";
-            $menu[] = "/checkBalance - Check Balance";
-            $menu[] = "/delegate - Delegate to staking-pool";
-            $menu[] = "/send - Send tokens to NEAR account";
-            $menu[] = "/sendTelegram - Send tokens to Telegram account";
-            $menu[] = "/deleteKey - Delete access Key from your NEAR account";
+            $menu[] = "{$this->strings["accountInfo"]}: `$nearLogin`";
+            $menu[] = "/checkBalance - " . $this->strings["checkBalance"];
+            $menu[] = "/delegate - " . $this->strings["delegate"];
+            $menu[] = "/send - " . $this->strings["send"];
+            $menu[] = "/sendTelegram - " . $this->strings["sendTelegram"];
+            $menu[] = "/deleteKey - " . $this->strings["deleteKey"];
+            $menu[] = "/logout - ". $this->strings["logout"];
         } else
-            $menu[] = "/login - Authorize this bot in your NEAR account";
+            $menu[] = "/login - " . $this->strings["login"];
 
         $menu = array_merge($menu, [
-            "/viewAccount username - Account data",
-            "/viewAccessKey username - Account access keys",
-            "/seatPrice - Minimal stake for validator",
-            "/currentValidators - Current Validators",
-            "/nextValidators - Next Validators",
-            "/currentProposals - Current Proposals",
-            // "/CurrentFishermen - CurrentFishermen",
-            // "/NextFishermen - Next Fishermen",
-            "/getKickouts - Previous epoch kickouts",
-            "/convert - Convert NEAR <-> yoctoNEAR",
-            "/about - About bot"
+            "*{$this->strings["validatorOperations"]}*",
+            "/seatPrice - ". $this->strings["minimalStakeValidator"],
+            "/currentValidators - ". $this->strings["currentValidators"],
+            "/nextValidators - ". $this->strings["nextValidators"],
+            "/currentProposals - ". $this->strings["currentProposals"],
+            "/getKickouts - ". $this->strings["previousEpochKickouts"],
+            "/convert - ". $this->strings["convertNEARyoctoNEAR"],
+            "*{$this->strings["blockchainData"]}*",
+            "/viewAccount username - ". $this->strings["accountData"],
+            "/viewAccessKey username - ". $this->strings["accountAccessKeys"],
+            "/about - ". $this->strings["aboutBot"]
         ]);
 
-        if ($nearLogin)
-            $menu[] = "/logout - Remove NEAR account from your telegram account";
+        // "/CurrentFishermen - CurrentFishermen",
+        // "/NextFishermen - Next Fishermen",
 
         $data = [
-            'chat_id' => $chat_id,
+            'chat_id' => $this->chat_id,
             'text' => join(chr(10), $menu),
+            'parse_mode' => 'markdown',
         ];
 
         return Request::sendMessage($data);
