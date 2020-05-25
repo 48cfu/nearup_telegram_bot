@@ -2,17 +2,13 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use Bot\Common;
-use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
-use Settings\Config;
 use Near\NearData;
+use Settings\Config;
 
-include_once __DIR__ . '/../bot.php';
-
-class LoginCommand extends UserCommand
+class LoginCommand extends MyCommand
 {
     protected $name = 'login';
     protected $description = 'Login to NEAR';
@@ -25,27 +21,18 @@ class LoginCommand extends UserCommand
 
     public function execute()
     {
-        $message = $this->getMessage();
-
-        $chat = $message->getChat();
-        $user = $message->getFrom();
-        $text = trim($message->getText(true));
-        $chat_id = $chat->getId();
-        $user_id = $user->getId();
-
-        if(!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
+        parent::execute();
+        if (!$this->ValidateAccess())
             return false;
 
-        $data = [
-            'chat_id' => $chat_id,
-        ];
+        $data = ['chat_id' => $this->chat_id];
 
 
-        if ($chat->isGroupChat() || $chat->isSuperGroup()) {
+        if ($this->chat->isGroupChat() || $this->chat->isSuperGroup()) {
             $data['reply_markup'] = Keyboard::forceReply(['selective' => true]);
         }
 
-        $this->conversation = new Conversation($user_id, $chat_id, $this->getName());
+        $this->conversation = new Conversation($this->user_id, $this->chat_id, $this->getName());
 
         $notes = &$this->conversation->notes;
         !is_array($notes) && $notes = [];
@@ -61,12 +48,12 @@ class LoginCommand extends UserCommand
         switch ($state) {
             case 0:
                 $pair = null;
-                if ($text === '') {
+                if ($this->text === '') {
                     $notes['state'] = 0;
 
-                    $nearLogin = NearData::GetUserLogin($pdo, $user_id);
-                    if($nearLogin){
-                        $data['text'] = "You already authorized current telegram account with the NEAR account $nearLogin";
+                    $nearLogin = NearData::GetUserLogin($pdo, $this->user_id);
+                    if ($nearLogin) {
+                        $data['text'] = "{$this->strings["alreadyAuthorized"]} $nearLogin";
                         Request::sendMessage($data);
                         $this->conversation->stop();
                         break;
@@ -83,20 +70,19 @@ class LoginCommand extends UserCommand
 
                     $this->conversation->update();
 
-                    $data['text'] = "Please authorize this bot in your NEAR account by the URL: " . $url;
+                    $data['text'] = self::GenerateOutput($this->strings["pleaseAuthorizeByUrl"], [$url]);
                     Request::sendMessage($data);
-                    $data['text'] = 'Which account did you use?';
+                    $data['text'] = $this->strings["whichAccountUsed"];
                     $result = Request::sendMessage($data);
 
                     break;
                 }
 
-                $notes['account'] = $text;
-                $text = '';
+                $notes['account'] = $this->text;
+                $this->text = '';
 
-            // no break
             case 1:
-                if ($text === '') {
+                if ($this->text === '') {
 
                     $account = $notes['account'];
                     $accountData = NearData:: GetAccountAccessKeys($account);
@@ -106,18 +92,18 @@ class LoginCommand extends UserCommand
                         $successFlag = false;
                         foreach ($accountData["result"]["keys"] as $key) {
                             if ($key["public_key"] === $notes['public']) {
-                                $data['text'] = "You associated current telegram account with the NEAR account $account. Now you can /send or /delegate NEAR tokens.";
+                                $data['text'] = self::GenerateOutput($this->strings["associatedCurrentTelegramWithNearAccount"], [$account]);
 
-                                NearData::saveUserDetails($pdo, $user_id, $notes['account'], $notes['public'], $notes['private']);
+                                NearData::saveUserDetails($pdo, $this->user_id, $notes['account'], $notes['public'], $notes['private']);
                                 $successFlag = true;
                                 break;
                             }
                         }
 
                         if (!$successFlag) {
-                            $data['text'] = "You didn't authorize this bot to work with account $account";
+                            $data['text'] = "{$this->strings["youDidntAuthorize"]} $account";
                             Request::sendMessage($data);
-                            $data['text'] = "Please try again by clicking /login ";
+                            $data['text'] = $this->strings["pleaseTryAgainByClickingLogin"];
                         }
 
                     }

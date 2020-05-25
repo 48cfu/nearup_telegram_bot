@@ -10,10 +10,18 @@
     "validatorsLegend": "Legend: ⚠ - kickout risk (produced blocks / expected blocks)",
     "pleaseEnterNearAccountName": "Please enter NEAR account name",
     "lockedAccount": "Locked account",
+    "YourAccountLocked": "You account {%0%} locked",
     "accountAccessKeys": "Account Access Keys",
     "locked": "Locked",
     "storageUsage": "Storage Usage",
-    "accessKeysList": "Access Keys List"
+    "accessKeysList": "Access Keys List",
+    "telegramAccountNotAuthorized": "You didn't authorize current telegram account with the NEAR account. Please click /login to proceed",
+    "invalidKey": "Invalid Key",
+    "YES": "YES",
+    "NO": "NO",
+    "commandNotFound": "Command /{%0%} not found. Please /start again",
+    "nearAccountSuccessfullyRemoved": "NEAR account {%0%} successfully removed from your current telegram account. Continue with the command /start",
+    "loginWasntFound": "Login wasn't found"
   },
   "about": {
     "title": "Near Shell Bot",
@@ -49,5 +57,25 @@
   },
   "seatPrice": {
     "title": "Current Validator's Seat Price"
+  },
+  "delegate": {
+    "pleaseEnterStakingPoolContract": "Please enter the name of your staking pool contract (for example: node)",
+    "howManyTokensDelegate": "How many NEAR tokens do you want to delegate to the contract"
+  },
+  "deleteKey": {
+    "yourCurrentAccessKeys" : "Your current access keys",
+    "sendPublicKeyOrIndex": "Please send a public key or index of the key from the list above to delete from account",
+    "areYouReadyToRemove": "Are you ready to remove the key {%0%} from account {%1%}?",
+    "thisWillAlsoDeleteTelegram": "This will also logout telegram bot from your account",
+    "exitTryAgain": "Exit. Try again using command /deleteKey",
+    "telegramBotKey": "Key associated with this Telegram"
+  },
+  "login": {
+    "alreadyAuthorized": "You already authorized current telegram account with the NEAR account",
+    "pleaseAuthorizeByUrl":"Please authorize this bot in your NEAR account by following the URL: {%0%}.\nYou may easily revoke access at any time",
+    "whichAccountUsed":"Which NEAR account did you use?",
+    "associatedCurrentTelegramWithNearAccount": "You associated current telegram account with the NEAR account {%0%}. Now you can /send or /delegate NEAR tokens.",
+    "youDidntAuthorize":  "You didn't authorize this bot to work with NEAR account",
+    "pleaseTryAgainByClickingLogin": "Please try again by clicking /login"
   }
 }

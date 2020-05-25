@@ -2,17 +2,15 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use Bot\Common;
-use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
-use Settings\Config;
 use Near\NearData;
+use Settings\Config;
 
 include_once __DIR__ . '/../bot.php';
 
-class DeleteKeyCommand extends UserCommand
+class DeleteKeyCommand extends MyCommand
 {
     protected $name = 'deleteKey';
     protected $description = 'Delete Access Key';
@@ -25,27 +23,17 @@ class DeleteKeyCommand extends UserCommand
 
     public function execute()
     {
-        $message = $this->getMessage();
-
-        $chat = $message->getChat();
-        $user = $message->getFrom();
-        $text = trim($message->getText(true));
-        $chat_id = $chat->getId();
-        $user_id = $user->getId();
-
-        if (!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
+        parent::execute();
+        if (!$this->ValidateAccess())
             return false;
 
-        $data = [
-            'chat_id' => $chat_id,
-        ];
+        $data = ['chat_id' => $this->chat_id];
 
-
-        if ($chat->isGroupChat() || $chat->isSuperGroup()) {
+        if ($this->chat->isGroupChat() || $this->chat->isSuperGroup()) {
             $data['reply_markup'] = Keyboard::forceReply(['selective' => true]);
         }
 
-        $this->conversation = new Conversation($user_id, $chat_id, $this->getName());
+        $this->conversation = new Conversation($this->user_id, $this->chat_id, $this->getName());
 
         $notes = &$this->conversation->notes;
         !is_array($notes) && $notes = [];
@@ -60,10 +48,10 @@ class DeleteKeyCommand extends UserCommand
 
         switch ($state) {
             case 0:
-                if ($text === '') {
-                    $nearLogin = NearData::GetUserLogin($pdo, $user_id);
+                if ($this->text === '') {
+                    $nearLogin = NearData::GetUserLogin($pdo, $this->user_id);
                     if (!$nearLogin) {
-                        $data['text'] = "You didn't authorize current telegram account with the NEAR account. Please click /login to proceed";
+                        $data['text'] = $this->strings["telegramAccountNotAuthorized"];
                         Request::sendMessage($data);
                         $this->conversation->stop();
                     } else {
@@ -73,24 +61,25 @@ class DeleteKeyCommand extends UserCommand
                         $keys = [];
 
                         if (!$accountData["result"]["keys"]) {
-                            $reply = "You account $nearLogin is locked";
+                            $reply = $this->GenerateOutput($this->strings["YourAccountLocked"], [$nearLogin]);
                             $this->conversation->stop();
                         } else {
                             $output = [];
-                            $nearPublicKey = NearData::GetPublicKey($pdo, $user_id);
-                            $notes["near_public_key"] =  $nearPublicKey;
+                            $nearPublicKey = NearData::GetPublicKey($pdo, $this->user_id);
+                            $notes["near_public_key"] = $nearPublicKey;
                             $this->conversation->update();
                             for ($i = 0; $i < count($accountData["result"]["keys"]); $i++) {
                                 $key = $accountData["result"]["keys"][$i];
-                                $string =  ($i + 1) . " " . $key["public_key"];
+                                $string = ($i + 1) . " `{$key["public_key"]}` ";
                                 if ($nearPublicKey === $key["public_key"])
-                                    $string .= " (Telegram bot key)";
+                                    $string .= " *({$this->strings["telegramBotKey"]})*";
                                 $output[] = $string;
                                 $keys[] = $key["public_key"];
                             }
-                            $data['text'] = "Your current access keys:" . PHP_EOL . join(chr(10), $output);
+                            $data['text'] = $this->strings["yourCurrentAccessKeys"] . PHP_EOL . join(chr(10), $output);
+                            $data['parse_mode'] = "markdown";
                             Request::sendMessage($data);
-                            $reply = "Please send a public key or index of the key from the list above to delete from account $nearLogin";
+                            $reply = "{$this->strings["sendPublicKeyOrIndex"]} *$nearLogin*";
                         }
 
                         $notes['keys'] = $keys;
@@ -104,20 +93,20 @@ class DeleteKeyCommand extends UserCommand
                     break;
                 }
 
-                $notes['public_key_or_index'] = $text;
-                $text = '';
+                $notes['public_key_or_index'] = $this->text;
+                $this->text = '';
 
             case 1:
-                if ($text === '' || !in_array($text, ['YES', 'NO'], true)) {
+                if ($this->text === '' || !in_array($this->text, [$this->strings["YES"], $this->strings["NO"]], true)) {
 
                     if ($notes['public_key_or_index']) {
                         $index = intval($notes['public_key_or_index']);
                         if ($index > 0 && isset($notes['keys']) && is_array($notes['keys']) && $index <= count($notes['keys']))
-                            $notes['public_key'] = $notes['keys'][$index-1];
+                            $notes['public_key'] = $notes['keys'][$index - 1];
                         else if (in_array($notes['public_key_or_index'], $notes['keys']))
                             $notes['public_key'] = $notes['public_key_or_index'];
                         else {
-                            $data['text'] = "Invalid key";
+                            $data['text'] = $this->strings["invalidKey"];
                             $this->conversation->stop();
                             Request::sendMessage($data);
                             break;
@@ -125,47 +114,46 @@ class DeleteKeyCommand extends UserCommand
 
                         $notes['state'] = 1;
                         $this->conversation->update();
-                        $data['text'] = "Are you ready to remove the key " . $notes['public_key'] . " from account " . $notes['near_account_id'] . "?";
+                        $data['text'] = $this->GenerateOutput($this->strings["areYouReadyToRemove"], ["`{$notes['public_key']}`",  "*{$notes['near_account_id']}*"]);
 
-                        if($notes['public_key'] === $notes['near_public_key'])
-                            $data['text'] .= PHP_EOL."This will also logout telegram bot from your account";
+                        if ($notes['public_key'] === $notes['near_public_key'])
+                            $data['text'] .= PHP_EOL . "{$this->strings["thisWillAlsoDeleteTelegram"]}.";
 
-                        $data['reply_markup'] = (new Keyboard(['YES', 'NO']))
+                        $data['reply_markup'] = (new Keyboard([$this->strings["YES"], $this->strings["NO"]]))
                             ->setResizeKeyboard(true)
                             ->setOneTimeKeyboard(true)
                             ->setSelective(true);
 
+                        $data['parse_mode'] = "markdown";
                         Request::sendMessage($data);
 
                         break;
                     }
                 }
 
-                $notes['confirm'] = $text;
-                $text = '';
+                $notes['confirm'] = $this->text;
+                $this->text = '';
 
             case 2:
-                if ($text === '') {
-
-                    if($notes['confirm'] === "YES") {
-                        $nearPrivateKey = NearData::GetPrivateKey($pdo, $user_id);
+                if ($this->text === '') {
+                    if ($notes['confirm'] === $this->strings["YES"]) {
+                        $nearPrivateKey = NearData::GetPrivateKey($pdo, $this->user_id);
                         $nearAccount = $notes['near_account_id'];
                         $publicKey = $notes['public_key'];
                         if ($publicKey && $nearPrivateKey && $nearAccount) {
                             $reply = shell_exec("cd " . Config::$nodejs_folder . "; node deleteKey.js $nearAccount $nearPrivateKey $publicKey 2>&1");
 
-                            if($publicKey === $notes['near_public_key']){
-                                NearData:: saveUserDetails($pdo, $user_id, "", "", "");
-                                $reply = PHP_EOL."NEAR account $nearAccount successfully removed from your current telegram account. Continue with the command /start";
+                            if ($publicKey === $notes['near_public_key']) {
+                                NearData:: saveUserDetails($pdo, $this->user_id, "", "", "");
+                                $reply = PHP_EOL . $this->GenerateOutput($this->strings["nearAccountSuccessfullyRemoved"], [$nearAccount]);
                             }
 
                             $data['text'] = $reply;
 
                         } else
-                            $data['text'] = "Wrong data";
-                    }
-                    else
-                        $data['text'] = "Exit. Try again using command /deleteKey";
+                            $data['text'] = $this->strings["wrongData"];
+                    } else
+                        $data['text'] = $this->strings["exitTryAgain"];
 
                     $data['reply_markup'] = Keyboard::remove(['selective' => true]);
 

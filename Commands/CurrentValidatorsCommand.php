@@ -13,7 +13,6 @@ class CurrentValidatorsCommand extends MyCommand
     protected $usage = '/currentValidators';
     protected $version = '1.0.0';
 
-
     public function execute()
     {
         parent::execute();

@@ -59,7 +59,7 @@ class MyCommand extends UserCommand
         $this->strings = $this->GetText($this->user, $this->name);
     }
 
-    public function GenerateOutput($message, $valuesArray = [])
+    public static function GenerateOutput($message, $valuesArray = [])
     {
         if (is_array($message))
             $message = join(chr(10), $message);
@@ -72,13 +72,20 @@ class MyCommand extends UserCommand
 
     public function ValidateAccess()
     {
-        if (in_array($this->chat_id, Config::$restrictedChatIds) && !in_array($this->user_id, Config::$adminIds)) {
+        return $this->ValidateAccessWithParameters($this->chat_id, $this->message_id, $this->user_id);
+    }
+
+    public static function ValidateAccessWithParameters($chat_id, $message_id, $user_id)
+    {
+        if (in_array($chat_id, Config::$restrictedChatIds) && !in_array($user_id, Config::$adminIds)) {
             Request::deleteMessage([
-                'chat_id' => $this->chat_id,
-                'message_id' => $this->message_id,
+                'chat_id' => $chat_id,
+                'message_id' => $message_id,
             ]);
             return false;
         }
         return true;
+
+
     }
 }

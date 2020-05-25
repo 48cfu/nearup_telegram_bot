@@ -3,6 +3,7 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Bot\Common;
 use Longman\TelegramBot\Commands\SystemCommand;
+use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Commands\UserCommands\MyCommand;
 use Longman\TelegramBot\Request;
 use Near\NearView;
@@ -26,7 +27,7 @@ class GenericCommand extends SystemCommand
         $user_id = $user->getId();
         $strings = MyCommand::GetText($user, null);
 
-        if (!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
+        if (!MyCommand::ValidateAccessWithParameters($chat_id, $message->getMessageId(), $user_id))
             return false;
 
         if (stripos($command_lower, 'viewaccount_') === 0) {
@@ -59,7 +60,7 @@ class GenericCommand extends SystemCommand
 
         $data = [
             'chat_id' => $chat_id,
-            'text'    => 'Command /' . $command . ' not found. Please /start again.',
+            'text'    => MyCommand::GenerateOutput($strings["commandNotFound"], [$command]),
         ];
 
         return Request::sendMessage($data);

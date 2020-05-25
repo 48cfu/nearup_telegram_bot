@@ -2,17 +2,13 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use Bot\Common;
-use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
-use Settings\Config;
 use Near\NearData;
+use Settings\Config;
 
-include_once __DIR__ . '/../bot.php';
-
-class DelegateCommand extends UserCommand
+class DelegateCommand extends MyCommand
 {
     protected $name = 'delegate';
     protected $description = 'Delegate to the Staking Pool';
@@ -25,27 +21,18 @@ class DelegateCommand extends UserCommand
 
     public function execute()
     {
-        $message = $this->getMessage();
-
-        $chat = $message->getChat();
-        $user = $message->getFrom();
-        $text = trim($message->getText(true));
-        $chat_id = $chat->getId();
-        $user_id = $user->getId();
-
-        if (!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
+        parent::execute();
+        if (!$this->ValidateAccess())
             return false;
 
-        $data = [
-            'chat_id' => $chat_id,
-        ];
+        $data = ['chat_id' => $this->chat_id];
 
 
-        if ($chat->isGroupChat() || $chat->isSuperGroup()) {
+        if ($this->chat->isGroupChat() || $this->chat->isSuperGroup()) {
             $data['reply_markup'] = Keyboard::forceReply(['selective' => true]);
         }
 
-        $this->conversation = new Conversation($user_id, $chat_id, $this->getName());
+        $this->conversation = new Conversation($this->user_id, $this->chat_id, $this->getName());
 
         $notes = &$this->conversation->notes;
         !is_array($notes) && $notes = [];
@@ -60,10 +47,10 @@ class DelegateCommand extends UserCommand
 
         switch ($state) {
             case 0:
-                if ($text === '') {
-                    $nearLogin = NearData::GetUserLogin($pdo, $user_id);
+                if ($this->text === '') {
+                    $nearLogin = NearData::GetUserLogin($pdo, $this->user_id);
                     if (!$nearLogin) {
-                        $data['text'] = "You didn't authorize current telegram account with the NEAR account. Please click /login to proceed";
+                        $data['text'] = $this->strings["telegramAccountNotAuthorized"];
                         Request::sendMessage($data);
                         $this->conversation->stop();
                     } else {
@@ -71,46 +58,46 @@ class DelegateCommand extends UserCommand
                         $notes['state'] = 0;
                         $this->conversation->update();
 
-                        $data['text'] = "Please enter the name of your staking pool contract (for example: node)";
+                        $data['text'] = $this->strings["pleaseEnterStakingPoolContract"];
                         Request::sendMessage($data);
                     }
 
                     break;
                 }
 
-                $notes['recipient'] = $text;
-                $text = '';
+                $notes['recipient'] = $this->text;
+                $this->text = '';
 
             case 1:
-                if ($text === '') {
+                if ($this->text === '') {
 
                     if ($notes['recipient']) {
                         $notes['state'] = 1;
                         $this->conversation->update();
                         $recipient = $notes['recipient'];
-                        $data['text'] = "How many NEAR tokens do you want to delegate to the contract $recipient?";
+                        $data['text'] = "{$this->strings["howManyTokensDelegate"]} $recipient?";
                         Request::sendMessage($data);
 
                         break;
                     }
                 }
 
-                $notes['amount'] = $text;
-                $text = '';
+                $notes['amount'] = $this->text;
+                $this->text = '';
 
             case 2:
-                if ($text === '') {
+                if ($this->text === '') {
 
-                    $nearPrivateKey = NearData::GetPrivateKey($pdo, $user_id);
+                    $nearPrivateKey = NearData::GetPrivateKey($pdo, $this->user_id);
                     $nearAccount = $notes['nearAccountId'];
                     $amount = $notes['amount'];
-                    $recipient =  $notes['recipient'];
+                    $recipient = $notes['recipient'];
                     if (intval($amount) > 0 && $nearPrivateKey && $nearAccount) {
                         $reply = shell_exec("cd " . Config::$nodejs_folder . "; node delegate.js $nearAccount $nearPrivateKey $recipient $amount 2>&1");
                         $data['text'] = $reply;
 
                     } else
-                        $data['text'] = "Wrong data";
+                        $data['text'] = $this->strings["wrongData"];
 
 
                     Request::sendMessage($data);

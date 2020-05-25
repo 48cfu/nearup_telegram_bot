@@ -2,37 +2,33 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use Bot\Common;
-use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
-use Near\NearData;
 
-include_once __DIR__ . '/../bot.php';
-
-class LogoutCommand extends UserCommand
+class LogoutCommand extends MyCommand
 {
+    protected $name = 'logout';
+    protected $description = 'Logout';
+    protected $usage = '/logout';
+    protected $version = '1.0.0';
+
     public function execute()
     {
-        $message = $this->getMessage();
-        $chat_id = $message->getChat()->getId();
-        $user = $message->getFrom();
-        $user_id = $user->getId();
-
-        if(!Common::ValidateAccess($chat_id, $message->getMessageId(), $user_id))
+        parent::execute();
+        if (!$this->ValidateAccess())
             return false;
 
         $pdo = NearData::InitializeDB();
-        $nearLogin = NearData::GetUserLogin($pdo, $user_id);
+        $nearLogin = NearData::GetUserLogin($pdo, $this->user_id);
 
         $data = [
-            'chat_id' => $chat_id,
+            'chat_id' => $this->chat_id,
         ];
 
         if(!$nearLogin)
-            $data['text'] = "Login wasn't found";
+            $data['text'] = $this->strings["loginWasntFound"];
         else{
-            NearData:: saveUserDetails($pdo, $user_id, "", "", "");
-            $data['text'] = "NEAR account $nearLogin successfully removed from your current telegram account";
+            NearData:: saveUserDetails($pdo, $this->user_id, "", "", "");
+            $data['text'] = $this->GenerateOutput($this->strings["nearAccountSuccessfullyRemoved"], [$nearLogin]);
         }
 
         return Request::sendMessage($data);
