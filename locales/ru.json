@@ -38,12 +38,13 @@
     "minimalStakeValidator": "Размер минимального стейка для валидаторов",
     "currentValidators": "Текущие валидаторы",
     "nextValidators": "Будущие валидаторы",
-    "currentProposals": "Текущие предложения",
+    "currentProposals": "Текущие заявки на место валидатора",
     "previousEpochKickouts": "Блокировки прошлой эпохи",
     "convertNEARyoctoNEAR": "Конвертация NEAR и yoctoNEAR",
     "aboutBot": "Информация о боте",
     "logout": "Удалить связь NEAR-аккаунта c Telegram-аккаунтом",
-    "blockchainData": "Данные блокчейна NEAR"
+    "blockchainData": "Данные блокчейна",
+    "addNode": "Добавить ноду, чтобы мониторить её статус"
   },
   "about": {
     "title": "Near Shell Bot",
@@ -99,5 +100,9 @@
     "associatedCurrentTelegramWithNearAccount": "Вы связали данный телеграм аккаунт со свои NEAR-аккаунтом {%0%}. Теперь вы можете отправлять (/send) и делегировать (/delegate) токены NEAR.",
     "youDidntAuthorize": "ВЫ не авторизовали данного телеграм-бота в NEAR-аккаунте ",
     "pleaseTryAgainByClickingLogin": "Пожалуйста, попробуйте заново, нажав на /login"
+  },
+  "addNode": {
+    "addNodeQuestion": "Укажаите NEAR аккаунт ноды, статус работы которой стледует остслеживать",
+    "nodeAccountAdded": "NEAR аккаунт для ноды `{%0%}` сохранён в вашем телеграм-аккаунте"
   }
 }

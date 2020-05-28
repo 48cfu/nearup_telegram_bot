@@ -3,6 +3,7 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use Longman\TelegramBot\Request;
+use Near\NearData;
 
 class LogoutCommand extends MyCommand
 {

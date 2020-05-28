@@ -43,7 +43,8 @@
     "convertNEARyoctoNEAR": "Convert NEAR & yoctoNEAR",
     "aboutBot": "About bot",
     "logout": "Remove NEAR account from your telegram account",
-    "blockchainData": "Blockchain Data"
+    "blockchainData": "Blockchain Data",
+    "addNode": "Add node to track its status"
   },
   "about": {
     "title": "Near Shell Bot",
@@ -99,5 +100,9 @@
     "associatedCurrentTelegramWithNearAccount": "You associated the current telegram account with the NEAR account {%0%}. Now you can /send or /delegate NEAR tokens.",
     "youDidntAuthorize": "You didn't authorize this bot to work with NEAR account",
     "pleaseTryAgainByClickingLogin": "Please try again by clicking /login"
+  },
+  "addNode": {
+    "addNodeQuestion": "Enter you NEAR node account to track its status",
+    "nodeAccountAdded": "NEAR Node account `{%0%}` added to your telegram"
   }
 }

@@ -37,6 +37,7 @@ class StartCommand extends MyCommand
 
         $menu = array_merge($menu, [
             "*{$this->strings["validatorOperations"]}*",
+            "/addNode - " . $this->strings["addNode"],
             "/seatPrice - ". $this->strings["minimalStakeValidator"],
             "/currentValidators - ". $this->strings["currentValidators"],
             "/nextValidators - ". $this->strings["nextValidators"],

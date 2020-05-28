@@ -55,7 +55,6 @@ class ConvertCommand extends MyCommand
                     $data['text'] = $this->strings["pleaseChooseConvertDirection"];
                     Request::sendMessage($data);
 
-
                     break;
                 }
 

@@ -43,7 +43,7 @@ Class NearData
 
     public static function ConvertNearToYoctoNear($amount)
     {
-        if(intval($amount) > 0)
+        if (intval($amount) > 0)
             return $amount . "000000000000000000000000";
         else
             return "";
@@ -71,6 +71,20 @@ Class NearData
             throw new TelegramException($e->getMessage());
         }
     }
+
+    public static function GetUserNodes($pdo)
+    {
+        try {
+            $sth = $pdo->prepare("SELECT `id`, `node_account`, `node_alarm_sent`, `language_code` FROM `user` WHERE `node_account` IS NOT NULL AND `node_account` <> ''");
+
+            $sth->execute();
+
+            return $sth->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            throw new TelegramException($e->getMessage());
+        }
+    }
+
 
     public static function GetUserLogin($pdo, $user_id)
     {
@@ -155,6 +169,36 @@ Class NearData
             throw new TelegramException($e->getMessage());
         }
     }
+
+    public static function setNodeAccount($pdo, $user_id, $node_account)
+    {
+        try {
+            $sth = $pdo->prepare('UPDATE `user` SET `node_account` = :node_account, `node_alarm_sent` = 0, `node_alarm_sent_at`= ""
+                WHERE `id` = :user_id LIMIT 1');
+
+            $sth->bindValue(':user_id', $user_id);
+            $sth->bindValue(':node_account', $node_account);
+
+            return $sth->execute();
+        } catch (Exception $e) {
+            throw new TelegramException($e->getMessage());
+        }
+    }
+
+    public static function setNodeAlarm($pdo, $user_id, $node_alarm_sent)
+    {
+        try {
+            $sth = $pdo->prepare('UPDATE `user` SET `node_alarm_sent` = :node_alarm_sent, `node_alarm_sent_at`  = NOW()
+                WHERE `id` = :user_id LIMIT 1');
+
+            $sth->bindValue(':node_alarm_sent', $node_alarm_sent);
+            $sth->bindValue(':user_id', $user_id);
+
+            return $sth->execute();
+        } catch (Exception $e) {
+            throw new TelegramException($e->getMessage());
+        }
+    }
 }
 
 Class NearView
@@ -188,12 +232,14 @@ Class NearView
         return $reply;
     }
 
-    public static function EscapeMarkdownCharacters($string){
+    public static function EscapeMarkdownCharacters($string)
+    {
         $string = str_replace("_", "\_", $string);
         return $string;
     }
 
-    public static function GetAccountDetails($account, $strings){
+    public static function GetAccountDetails($account, $strings)
+    {
         if ($account) {
             $accountData = NearData::GetAccountBalance($account);
 
@@ -202,8 +248,7 @@ Class NearView
             else {
                 $reply = NearView::GetAccountDataDetails($account, $accountData["result"], $strings);
             }
-        }
-        else
+        } else
             $reply = $strings["wrongData"];
 
         return $reply;
@@ -211,23 +256,24 @@ Class NearView
 
     public static function GetAccountDataDetails($account, $accountData, $strings)
     {
-        $output = ["{$strings['account']} *".strtoupper($account)."*",
-            "{$strings['balance']}: `". NearData::RoundNearBalance($accountData["amount"])." NEAR`",
-            "{$strings['locked']}: `". NearData::RoundNearBalance($accountData["locked"])." NEAR`",
-            "{$strings['storageUsage']}: `". NearData::RoundNearBalance($accountData["storage_usage"])."`",
-            "{$strings['accessKeysList']}: /ViewAccessKey\_". str_replace(".", "\_", $account)];
+        $output = ["{$strings['account']} *" . strtoupper($account) . "*",
+            "{$strings['balance']}: `" . NearData::RoundNearBalance($accountData["amount"]) . " NEAR`",
+            "{$strings['locked']}: `" . NearData::RoundNearBalance($accountData["locked"]) . " NEAR`",
+            "{$strings['storageUsage']}: `" . NearData::RoundNearBalance($accountData["storage_usage"]) . "`",
+            "{$strings['accessKeysList']}: /ViewAccessKey\_" . str_replace(".", "\_", $account)];
 
         return join(chr(10), $output);
     }
 
-    public static function GetAccountAccessKeysDetails($account, $strings){
+    public static function GetAccountAccessKeysDetails($account, $strings)
+    {
         if ($account) {
             $accountData = NearData::GetAccountAccessKeys($account);
 
             if (isset($accountData["error"]))
                 $reply = $accountData["error"]["message"] . " " . $accountData["error"]["data"];
             else {
-                $output[] = "{$strings["accountAccessKeys"]} *". strtoupper($account)."*";
+                $output[] = "{$strings["accountAccessKeys"]} *" . strtoupper($account) . "*";
                 if (!$accountData["result"]["keys"])
                     $output[] = "\[{$strings["lockedAccount"]}]";
                 else {
@@ -236,10 +282,9 @@ Class NearView
                     }
                 }
 
-                $reply =  join(PHP_EOL, $output);
+                $reply = join(PHP_EOL, $output);
             }
-        }
-        else
+        } else
             $reply = $strings['wrongData'];
 
         return $reply;
