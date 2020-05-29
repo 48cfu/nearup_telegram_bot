@@ -21,34 +21,42 @@ class StartCommand extends MyCommand
             return false;
 
         $pdo = NearData::InitializeDB();
-        $nearLogin = NearData::GetUserLogin($pdo, $this->user_id);
+        $userData = NearData::GetUserData($pdo, $this->user_id);
+        $nearLogin = null;
+        if (count($userData)) {
+            $userData = $userData[0];
+            $nearLogin = $userData["near_account"];
+            $nearNode = $userData["node_account"] ? (". {$this->strings["node"]}: `{$userData["node_account"]}`") : "";
+            if ($userData["node_alarm_sent"])
+                $nearNode .= "⚠";
+        }
 
         $menu[] = $this->strings["title"];
         if ($nearLogin) {
             $menu[] = "*{$this->strings["walletInfo"]}*:";
-            $menu[] = "{$this->strings["currentNearAccount"]}: `$nearLogin`";
+            $menu[] = "{$this->strings["currentNearAccount"]}: `$nearLogin`" . $nearNode;
             $menu[] = "/checkBalance - " . $this->strings["checkBalance"];
             $menu[] = "/delegate - " . $this->strings["delegate"];
             $menu[] = "/send - " . $this->strings["send"];
             $menu[] = "/sendTelegram - " . $this->strings["sendTelegram"];
             $menu[] = "/deleteKey - " . $this->strings["deleteKey"];
-            $menu[] = "/logout - ". $this->strings["logout"];
+            $menu[] = "/logout - " . $this->strings["logout"];
         } else
             $menu[] = "/login - " . $this->strings["login"];
 
         $menu = array_merge($menu, [
             "*{$this->strings["validatorOperations"]}*",
             "/addNode - " . $this->strings["addNode"],
-            "/seatPrice - ". $this->strings["minimalStakeValidator"],
-            "/currentValidators - ". $this->strings["currentValidators"],
-            "/nextValidators - ". $this->strings["nextValidators"],
-            "/currentProposals - ". $this->strings["currentProposals"],
-            "/getKickouts - ". $this->strings["previousEpochKickouts"],
-            "/convert - ". $this->strings["convertNEARyoctoNEAR"],
+            "/seatPrice - " . $this->strings["minimalStakeValidator"],
+            "/currentValidators - " . $this->strings["currentValidators"],
+            "/nextValidators - " . $this->strings["nextValidators"],
+            "/currentProposals - " . $this->strings["currentProposals"],
+            "/getKickouts - " . $this->strings["previousEpochKickouts"],
+            "/convert - " . $this->strings["convertNEARyoctoNEAR"],
             "*{$this->strings["blockchainData"]}*",
-            "/viewAccount username - ". $this->strings["accountData"],
-            "/viewAccessKey username - ". $this->strings["accessKeysList"],
-            "/about - ". $this->strings["aboutBot"]
+            "/viewAccount username - " . $this->strings["accountData"],
+            "/viewAccessKey username - " . $this->strings["accessKeysList"],
+            "/about - " . $this->strings["aboutBot"]
         ]);
 
         // "/CurrentFishermen - CurrentFishermen",

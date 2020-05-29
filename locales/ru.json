@@ -1,6 +1,7 @@
 {
   "general": {
     "account": "Аккаунт",
+    "node": "Нода",
     "balance": "Баланс",
     "accountNotFound": "Аккаунт не найден",
     "notFound": "Данные не найдены",

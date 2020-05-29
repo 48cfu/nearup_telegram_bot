@@ -1,6 +1,7 @@
 {
   "general": {
     "account": "Account",
+    "node": "Node",
     "balance": "Balance",
     "accountNotFound": "Account not found",
     "notFound": "Not found",

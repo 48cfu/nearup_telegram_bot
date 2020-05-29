@@ -101,6 +101,21 @@ Class NearData
         }
     }
 
+    public static function GetUserData($pdo, $user_id)
+    {
+        try {
+            $sth = $pdo->prepare('SELECT `near_account`, `node_account`, `node_alarm_sent` FROM `user` WHERE `id` = :user_id LIMIT 1');
+
+            $sth->bindValue(':user_id', $user_id);
+
+            $sth->execute();
+
+            return $sth->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            throw new TelegramException($e->getMessage());
+        }
+    }
+
     public static function SetUserCredentials($pdo, $id, $near_account, $public_key, $private_key)
     {
         try {
