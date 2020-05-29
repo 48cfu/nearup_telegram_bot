@@ -105,5 +105,8 @@
   "addNode": {
     "addNodeQuestion": "Enter you NEAR node account to track its status",
     "nodeAccountAdded": "NEAR Node account `{%0%}` added to your telegram"
+  },
+  "topValidators": {
+    "title": "Top Validators by their balance"
   }
 }

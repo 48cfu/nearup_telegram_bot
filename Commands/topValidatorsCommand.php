@@ -6,11 +6,11 @@ use Longman\TelegramBot\Request;
 use Near\NearData;
 use Near\NearView;
 
-class CurrentValidatorsCommand extends MyCommand
+class TopValidatorsCommand extends MyCommand
 {
-    protected $name = 'currentValidators';
-    protected $description = 'Get Current Validators';
-    protected $usage = '/currentValidators';
+    protected $name = 'topValidators';
+    protected $description = 'Get Current Top Validators';
+    protected $usage = '/topValidators';
     protected $version = '1.0.0';
 
     public function execute()
@@ -24,7 +24,7 @@ class CurrentValidatorsCommand extends MyCommand
         if(isset($validatorsData['error']))
             $reply = $validatorsData['error']['message'];
         else
-            $reply = "{$this->strings['currentValidators']} \n{$this->GenerateOutput(NearView::FormatValidators($validatorsData['result']['current_validators'],  $this->strings))}";
+            $reply = "🔝{$this->strings['title']} \n{$this->GenerateOutput(NearView::FormatValidators($validatorsData['result']['current_validators'],  $this->strings, "stake"))}";
 
         $data = [
             'chat_id' => $this->chat_id,

@@ -47,7 +47,14 @@ class GenericCommand extends SystemCommand
                 'parse_mode' => 'markdown',
             ];
             return Request::sendMessage($data);
-        } else if (stripos($command_lower, 'viewaccount_') === 0) {
+        }  if ($command_lower === "нодаспит") {
+        $data = [
+            'chat_id' => $chat_id,
+            'text' => "Если нода не производит блоки после запуска делегирования через стейкинг-пул, убедитесь, что прописали имя аккаунта от контракта стейкинг-пула в поле `account_id` в файле `~/.near/betanet/validator_key.json` и перезапустили ноду",
+            'parse_mode' => 'markdown',
+        ];
+        return Request::sendMessage($data);
+    }else if (stripos($command_lower, 'viewaccount_') === 0) {
             $account = substr($text, strpos($text, "_") + 1);
             $account = str_replace("_", ".", $account);
 

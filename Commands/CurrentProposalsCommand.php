@@ -21,7 +21,7 @@ class CurrentProposalsCommand extends MyCommand
 
         $validatorsData = NearData::GetNearRpcData("validators");
 
-        $reply = "{$this->strings['currentProposals']} \n {$this->GenerateOutput(NearView::FormatValidators($validatorsData['result']['current_proposals'],  $this->strings))}";
+        $reply = "{$this->strings['currentProposals']} \n{$this->GenerateOutput(NearView::FormatValidators($validatorsData['result']['current_proposals'],  $this->strings))}";
 
         $data = [
             'chat_id' => $this->chat_id,

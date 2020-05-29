@@ -218,27 +218,31 @@ Class NearData
 
 Class NearView
 {
-    public static function FormatValidators($validators, $strings)
+    public static function FormatValidators($validators, $strings, $sortBy = "account_id")
     {
         if (!is_array($validators) || !count($validators))
             return $strings["notFound"];
 
-        usort($validators, function ($a, $b) {
-            return strcmp($a["account_id"], $b["account_id"]);
-        });
+        if ($sortBy)
+            usort($validators, function ($a, $b) use ($sortBy) {
+                if ($sortBy === "account_id")
+                    return strcmp($a[$sortBy], $b[$sortBy]);
+                if ($sortBy === "stake")
+                    return ($a[$sortBy] > $b[$sortBy] ? -1 : ($a[$sortBy] < $b[$sortBy] ? 1 : 0));
+            });
 
         $reply = "";
-        $i = 1;
         $alertFound = false;
         $validatorPositionsQuantity = strlen(count($validators));
 
-        foreach ($validators as $validator) {
+        for ($i = 0; $i < count($validators); $i++) {
+            $validator = $validators[$i];
             $alert = "";
             if (isset($validator["num_produced_blocks"]) && isset($validator["num_expected_blocks"]) && $validator["num_produced_blocks"] < ($validator["num_expected_blocks"] * 0.9)) {
                 $alert = " ⚠️ `(" . $validator["num_produced_blocks"] . "/" . $validator["num_expected_blocks"] . ")`";
                 $alertFound = true;
             }
-            $reply .= (str_pad($i++, $validatorPositionsQuantity, "0", STR_PAD_LEFT)) . ". " . NearView::EscapeMarkdownCharacters($validator["account_id"]) . ": `" . NearData::RoundNearBalance($validator["stake"]) . " NEAR`" . $alert . "\n";
+            $reply .= (str_pad(($i+1), $validatorPositionsQuantity, "0", STR_PAD_LEFT)) . ". " . NearView::EscapeMarkdownCharacters($validator["account_id"]) . ": `" . NearData::RoundNearBalance($validator["stake"]) . " NEAR`" . $alert . "\n";
         }
 
         if ($alertFound)
