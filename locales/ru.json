@@ -55,7 +55,7 @@
     "associatedPublicKey": "Привязанный к боту публичный ключ"
   },
   "convert": {
-    "pleaseChooseConvertDirection": "Выберете направление конвертации",
+    "pleaseChooseConvertDirection": "Выберите направление конвертации",
     "pleaseEnterAmountToConvert": "Укажите количество токенов для конвертации"
   },
   "currentFishermen": {
@@ -77,7 +77,7 @@
     "title": "Аккаунты, подвергшиеся блокировке в прошлой эпохе",
     "notEnoughBlocks": "Недостаточно блоков",
     "produced": "Произведено",
-    "notEnoughStake": "Недостаточный размер сейка"
+    "notEnoughStake": "Недостаточный размер стейка"
   },
   "seatPrice": {
     "title": "Текущая цена места валидатора"
@@ -98,12 +98,12 @@
     "alreadyAuthorized": "Вы уже авторизовали данный Telegram-аккаунт со своим аккаунтом в NEAR",
     "pleaseAuthorizeByUrl": "Пожалуйста, авторизуйте данного бота в своем аккаунте NEAR, пройдя по ссылке: {%0%}.\nВы легко можете удалить эту привязку в любое время",
     "whichAccountUsed": "Какой NEAR-аккаунт вы использовали?",
-    "associatedCurrentTelegramWithNearAccount": "Вы связали данный телеграм аккаунт со свои NEAR-аккаунтом {%0%}. Теперь вы можете отправлять (/send) и делегировать (/delegate) токены NEAR.",
+    "associatedCurrentTelegramWithNearAccount": "Вы связали данный телеграм аккаунт со своим NEAR-аккаунтом {%0%}. Теперь вы можете отправлять (/send) и делегировать (/delegate) токены NEAR.",
     "youDidntAuthorize": "ВЫ не авторизовали данного телеграм-бота в NEAR-аккаунте ",
     "pleaseTryAgainByClickingLogin": "Пожалуйста, попробуйте заново, нажав на /login"
   },
   "addNode": {
-    "addNodeQuestion": "Укажаите NEAR аккаунт ноды, статус работы которой стледует остслеживать",
+    "addNodeQuestion": "Укажите NEAR аккаунт ноды, статус работы которой следует отслеживать",
     "nodeAccountAdded": "NEAR аккаунт для ноды `{%0%}` сохранён в вашем телеграм-аккаунте"
   }
 }
