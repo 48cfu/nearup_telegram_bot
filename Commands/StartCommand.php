@@ -25,7 +25,8 @@ class StartCommand extends MyCommand
 
         $menu[] = $this->strings["title"];
         if ($nearLogin) {
-            $menu[] = "{$this->strings["accountInfo"]}: `$nearLogin`";
+            $menu[] = "*{$this->strings["walletInfo"]}*:";
+            $menu[] = "{$this->strings["currentNearAccount"]}: `$nearLogin`";
             $menu[] = "/checkBalance - " . $this->strings["checkBalance"];
             $menu[] = "/delegate - " . $this->strings["delegate"];
             $menu[] = "/send - " . $this->strings["send"];
@@ -46,7 +47,7 @@ class StartCommand extends MyCommand
             "/convert - ". $this->strings["convertNEARyoctoNEAR"],
             "*{$this->strings["blockchainData"]}*",
             "/viewAccount username - ". $this->strings["accountData"],
-            "/viewAccessKey username - ". $this->strings["accountAccessKeys"],
+            "/viewAccessKey username - ". $this->strings["accessKeysList"],
             "/about - ". $this->strings["aboutBot"]
         ]);
 

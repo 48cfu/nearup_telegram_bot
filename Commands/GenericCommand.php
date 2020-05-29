@@ -56,6 +56,7 @@ class GenericCommand extends SystemCommand
                 $data = [
                     'chat_id' => $chat_id,
                     'text' => $reply,
+                    'parse_mode' => 'markdown'
                 ];
                 return Request::sendMessage($data);
             }

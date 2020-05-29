@@ -20,7 +20,7 @@ class GetKickoutsCommand extends MyCommand
 
         $kickouts = shell_exec("cd " . Config::$nodejs_folder . "; node getKickouts.js 2>&1");
         $kickouts = json_decode($kickouts, true);
-        $output[] = $this->strings['title'];
+        $output[] = $this->strings['title'].":";
         foreach ($kickouts as $validator) {
             $reply = "*{$validator["account_id"]}*: ";
 

@@ -59,6 +59,7 @@ class DelegateCommand extends MyCommand
                         $this->conversation->update();
 
                         $data['text'] = $this->strings["pleaseEnterStakingPoolContract"];
+                        $data['parse_mode'] = 'markdown';
                         Request::sendMessage($data);
                     }
 
