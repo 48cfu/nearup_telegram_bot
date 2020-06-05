@@ -19,6 +19,8 @@ class GetKickoutsCommand extends MyCommand
             return false;
 
         $kickouts = shell_exec("cd " . Config::$nodejs_folder . "; node getKickouts.js 2>&1");
+        $kickouts = self::CleanNodejsOutput($kickouts);
+
         $kickouts = json_decode($kickouts, true);
         $output[] = $this->strings['title'].":";
         foreach ($kickouts as $validator) {

@@ -131,7 +131,8 @@ class SendTelegramCommand extends UserCommand
                             if ($status) {
                                 $nearPrivateKey =  NearData::GetPrivateKey($pdo, $user_id);
                                 $reply = shell_exec("cd " . Config::$nodejs_folder . "; node sendMoney.js $nearLogin $nearPrivateKey $nearAccount $amount 2>&1");
-
+                                //$reply = self::CleanNodejsOutput($reply);
+                                
                                 $errorPosition = strpos($reply, "Error: ");
                                 if ($errorPosition > -1) {
                                     $reply = substr($reply, $errorPosition, (strpos($reply, "\n") - $errorPosition));

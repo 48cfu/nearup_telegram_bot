@@ -43,7 +43,7 @@ class GenericCommand extends SystemCommand
             }*/
             $data = [
                 'chat_id' => $chat_id,
-                'text' => "Попробуйте переключиться на betanet командой\n`export NODE_ENV = betanet`",
+                'text' => "Попробуйте переключиться на betanet командой\n`export NODE_ENV=betanet`",
                 'parse_mode' => 'markdown',
             ];
             return Request::sendMessage($data);

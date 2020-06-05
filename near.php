@@ -238,8 +238,8 @@ Class NearView
         for ($i = 0; $i < count($validators); $i++) {
             $validator = $validators[$i];
             $alert = "";
-            if (isset($validator["num_produced_blocks"]) && isset($validator["num_expected_blocks"]) && $validator["num_produced_blocks"] < ($validator["num_expected_blocks"] * 0.9)) {
-                $alert = " ⚠️ `(" . $validator["num_produced_blocks"] . "/" . $validator["num_expected_blocks"] . ")`";
+            if (isset($validator["num_produced_blocks"]) && isset($validator["num_expected_blocks"]) && $validator["num_expected_blocks"] > 10 && $validator["num_produced_blocks"] < ($validator["num_expected_blocks"] * 0.9)) {
+                $alert = " ⚠️ (" . $validator["num_produced_blocks"] . "/" . $validator["num_expected_blocks"] . ")";
                 $alertFound = true;
             }
             $reply .= (str_pad(($i+1), $validatorPositionsQuantity, "0", STR_PAD_LEFT)) . ". " . NearView::EscapeMarkdownCharacters($validator["account_id"]) . ": `" . NearData::RoundNearBalance($validator["stake"]) . " NEAR`" . $alert . "\n";

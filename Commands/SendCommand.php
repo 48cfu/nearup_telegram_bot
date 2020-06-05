@@ -109,6 +109,7 @@ class SendCommand extends UserCommand
                         $nearPrivateKey = NearData::GetPrivateKey($pdo, $user_id);
 
                         $reply = shell_exec("cd " . Config::$nodejs_folder . "; node sendMoney.js $nearLogin $nearPrivateKey $recipient $amount 2>&1");
+                        //$reply = self::CleanNodejsOutput($reply);
 
                         $errorPosition =strpos( $reply, "Error: ");
                         if($errorPosition> -1){

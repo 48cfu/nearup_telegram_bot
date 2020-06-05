@@ -39,6 +39,7 @@ class StartCommand extends MyCommand
             $menu[] = "/delegate - " . $this->strings["delegate"];
             $menu[] = "/send - " . $this->strings["send"];
             $menu[] = "/sendTelegram - " . $this->strings["sendTelegram"];
+            $menu[] = "/ping - " . $this->strings["ping"];
             $menu[] = "/deleteKey - " . $this->strings["deleteKey"];
             $menu[] = "/logout - " . $this->strings["logout"];
         } else

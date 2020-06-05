@@ -153,7 +153,7 @@ class DeleteKeyCommand extends MyCommand
                         } else
                             $data['text'] = $this->strings["wrongData"];
                     } else
-                        $data['text'] = $this->strings["exitTryAgain"];
+                        $data['text'] = self::GenerateOutput($this->strings["exitTryAgain"], ["deleteKey"]);
 
                     $data['reply_markup'] = Keyboard::remove(['selective' => true]);
 

@@ -16,12 +16,12 @@
     "locked": "Locked",
     "storageUsage": "Storage Usage",
     "accessKeysList": "Access Keys List",
-    "telegramAccountNotAuthorized": "You didn't authorize the current telegram account with your NEAR account. Please click /login to proceed",
+    "telegramAccountNotAuthorized": "You didn't authorize the current Telegram account with your NEAR account. Please click /login to proceed",
     "invalidKey": "Invalid Key",
     "YES": "YES",
     "NO": "NO",
     "commandNotFound": "Command /{%0%} not found. Please /start again",
-    "nearAccountSuccessfullyRemoved": "NEAR account {%0%} successfully removed from your current telegram account. Continue with the command /start",
+    "nearAccountSuccessfullyRemoved": "NEAR account {%0%} successfully removed from your current Telegram account. Continue with the command /start",
     "loginWasntFound": "Login wasn't found"
   },
   "start": {
@@ -29,7 +29,8 @@
     "walletInfo": "NEAR wallet operations",
     "currentNearAccount": "Current NEAR account",
     "checkBalance": "Check Balance",
-    "delegate": "Delegate to staking pool",
+    "delegate": "Delegate to staking pool contract",
+    "ping": "Ping a staking pool contract",
     "send": "Send tokens to NEAR account",
     "sendTelegram": "Send tokens to Telegram account",
     "deleteKey": "Delete Access Key from your NEAR account",
@@ -43,7 +44,7 @@
     "previousEpochKickouts": "Previous epoch kickouts",
     "convertNEARyoctoNEAR": "Convert NEAR & yoctoNEAR",
     "aboutBot": "About bot",
-    "logout": "Remove NEAR account from your telegram account",
+    "logout": "Remove NEAR account from your Telegram account",
     "blockchainData": "Blockchain Data",
     "addNode": "Add node to track its status"
   },
@@ -90,23 +91,26 @@
     "yourCurrentAccessKeys" : "Your current Access Keys",
     "sendPublicKeyOrIndex": "Please send a public key or index of the key from the list above to delete from account",
     "areYouReadyToRemove": "Are you ready to remove the key {%0%} from account {%1%}?",
-    "thisWillAlsoDeleteTelegram": "This will also logout telegram bot from your account",
+    "thisWillAlsoDeleteTelegram": "This will also logout Telegram bot from your account",
     "exitTryAgain": "Exit. Try again using command /deleteKey",
     "telegramBotKey": "Key associated with this Telegram"
   },
   "login": {
-    "alreadyAuthorized": "You already authorized current telegram account with the NEAR account",
+    "alreadyAuthorized": "You already authorized current Telegram account with the NEAR account",
     "pleaseAuthorizeByUrl":"Please authorize this bot in your NEAR account by following the URL: {%0%}.\nYou may easily revoke access at any time",
     "whichAccountUsed":"Which NEAR account did you use?",
-    "associatedCurrentTelegramWithNearAccount": "You associated the current telegram account with the NEAR account {%0%}. Now you can /send or /delegate NEAR tokens.",
+    "associatedCurrentTelegramWithNearAccount": "You associated the current Telegram account with the NEAR account {%0%}. Now you can /start to /send or /delegate NEAR tokens. ",
     "youDidntAuthorize": "You didn't authorize this bot to work with NEAR account",
     "pleaseTryAgainByClickingLogin": "Please try again by clicking /login"
   },
   "addNode": {
     "addNodeQuestion": "Enter you NEAR node account to track its status",
-    "nodeAccountAdded": "NEAR Node account `{%0%}` added to your telegram"
+    "nodeAccountAdded": "NEAR Node account `{%0%}` added to your Telegram"
   },
   "topValidators": {
     "title": "Top Validators by their balance"
+  },
+  "ping": {
+    "enterContractName": "Please enter name of the contract created by master account `{%0%}` in order to `ping` it"
   }
 }

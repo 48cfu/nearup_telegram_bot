@@ -22,12 +22,11 @@ if (isset($validatorsData["result"]) && isset($validatorsData["result"]["current
                     if (!$user["node_alarm_sent"]) { // send alert
                         NearData::setNodeAlarm($pdo, $user["id"], 1);
                         if($user['language_code'] === "ru")
-                            SendMessage($user["id"], "⚠ NEAR аккаунт `{$user['node_account']}` перестал производить блоки.
-Ожидания/реальность: {$validator["num_expected_blocks"]}/{$validator["num_produced_blocks"]} блоков");
+                            SendMessage($user["id"], "⚠ NEAR аккаунт `{$user['node_account']}` отстает в создании блоков.
+Произведено/ожидалось: {$validator["num_produced_blocks"]}/{$validator["num_expected_blocks"]} блоков");
                         else
                             SendMessage($user["id"], "⚠ NEAR account `{$user['node_account']}` has troubles with blocks producing.
-Expected/produced: {$validator["num_expected_blocks"]}/{$validator["num_produced_blocks"]} blocks");
-                        echo "{$user["id"]} alarm\n";
+Produced/expected: {$validator["num_produced_blocks"]}/{$validator["num_expected_blocks"]} blocks");
                     }
                 } else {
                     if ($user["node_alarm_sent"]) { // remove alert

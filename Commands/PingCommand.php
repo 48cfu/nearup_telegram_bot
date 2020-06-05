@@ -8,11 +8,13 @@ use Longman\TelegramBot\Request;
 use Near\NearData;
 use Settings\Config;
 
-class DelegateCommand extends MyCommand
+include_once __DIR__ . '/../bot.php';
+
+class PingCommand extends MyCommand
 {
-    protected $name = 'delegate';
-    protected $description = 'Delegate to the Staking Pool';
-    protected $usage = '/delegate';
+    protected $name = 'ping';
+    protected $description = 'Ping Contract';
+    protected $usage = '/ping';
     protected $version = '1.0.0';
     protected $need_mysql = true;
     protected $private_only = true;
@@ -26,7 +28,6 @@ class DelegateCommand extends MyCommand
             return false;
 
         $data = ['chat_id' => $this->chat_id];
-
 
         if ($this->chat->isGroupChat() || $this->chat->isSuperGroup()) {
             $data['reply_markup'] = Keyboard::forceReply(['selective' => true]);
@@ -54,52 +55,38 @@ class DelegateCommand extends MyCommand
                         Request::sendMessage($data);
                         $this->conversation->stop();
                     } else {
-                        $notes['nearAccountId'] = $nearLogin;
+                        $notes['near_account_id'] = $nearLogin;
+                        $data['text'] = self::GenerateOutput($this->strings["enterContractName"], [$nearLogin]);
+                        $data['parse_mode'] = "markdown";
+                        Request::sendMessage($data);
+
                         $notes['state'] = 0;
                         $this->conversation->update();
-
-                        $data['text'] = $this->strings["pleaseEnterStakingPoolContract"];
-                        $data['parse_mode'] = 'markdown';
-                        Request::sendMessage($data);
                     }
 
                     break;
                 }
 
-                $notes['recipient'] = $this->text;
+                $notes['contract_name'] = $this->text;
                 $this->text = '';
 
             case 1:
                 if ($this->text === '') {
 
-                    if ($notes['recipient']) {
-                        $notes['state'] = 1;
-                        $this->conversation->update();
-                        $recipient = $notes['recipient'];
-                        $data['text'] = "{$this->strings["howManyTokensDelegate"]} $recipient?";
-                        Request::sendMessage($data);
+                    if ($notes['contract_name']) {
+                        $nearPrivateKey = NearData::GetPrivateKey($pdo, $this->user_id);
+                        $nearAccount = $notes['near_account_id'];
+                        $contractName = $notes['contract_name'];
+                        if ($nearPrivateKey && $nearAccount && $contractName) {
+                            $reply = shell_exec("cd " . Config::$nodejs_folder . "; node ping.js $nearAccount $nearPrivateKey $contractName 2>&1");
+                            $data['text'] = self::CleanNodejsOutput($reply);
 
-                        break;
-                    }
-                }
-
-                $notes['amount'] = $this->text;
-                $this->text = '';
-
-            case 2:
-                if ($this->text === '') {
-
-                    $nearPrivateKey = NearData::GetPrivateKey($pdo, $this->user_id);
-                    $nearAccount = $notes['nearAccountId'];
-                    $amount = $notes['amount'];
-                    $recipient = $notes['recipient'];
-                    if (intval($amount) > 0 && $nearPrivateKey && $nearAccount) {
-                        $reply = shell_exec("cd " . Config::$nodejs_folder . "; node delegate.js $nearAccount $nearPrivateKey $recipient $amount 2>&1");
-                        $data['text'] =self::CleanNodejsOutput($reply);
-
+                        } else
+                            $data['text'] = $this->strings["wrongData"];
                     } else
-                        $data['text'] = $this->strings["wrongData"];
+                        $data['text'] = self::GenerateOutput($this->strings["exitTryAgain"], ["ping"]);
 
+                    $data['reply_markup'] = Keyboard::remove(['selective' => true]);
 
                     Request::sendMessage($data);
                     $this->conversation->stop();

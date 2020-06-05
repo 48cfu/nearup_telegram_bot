@@ -21,6 +21,8 @@ class SeatPriceCommand extends MyCommand
             return false;
 
         $price = shell_exec("cd " . Config::$nodejs_folder . "; node getSeatPrice.js 2>&1");
+        $price = self::CleanNodejsOutput($price);
+
         $price = trim($price);
 
         $data = [

@@ -3,6 +3,7 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use Longman\TelegramBot\Commands\UserCommand;
+use Near\NearData;
 use Settings\Config;
 use Longman\TelegramBot\Request;
 
@@ -58,6 +59,15 @@ class MyCommand extends UserCommand
 
         $this->strings = $this->GetText($this->user, $this->name);
     }
+
+    public static function CleanNodejsOutput($string)
+    {
+        foreach (Config::$stringToCleanFromNodeJs as $fix) {
+            $string = str_replace($fix, "", $string);
+        }
+        return $string;
+    }
+
 
     public static function GenerateOutput($message, $valuesArray = [])
     {
