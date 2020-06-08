@@ -31,16 +31,12 @@ class GenericCommand extends SystemCommand
         $strings = MyCommand::GetText($user, null);
         $message_id = $message->getMessageId();
 
-        if (!MyCommand::ValidateAccessWithParameters($chat_id, $message->getMessageId(), $user_id))
+        $allowDelete = substr_count($text, "/") === 0 && strpos($text, '0') === false;
+
+        if (!MyCommand::ValidateAccessWithParameters($chat_id, $message_id, $user_id, $allowDelete))
             return false;
 
         if ($command_lower === "всёплохо") {
-            /*if (in_array($chat_id, Config::$restrictedChatIds)) {
-                Request::deleteMessage([
-                    'chat_id' => $chat_id,
-                    'message_id' => $message_id,
-                ]);
-            }*/
             $data = [
                 'chat_id' => $chat_id,
                 'text' => "Попробуйте переключиться на betanet командой\n`export NODE_ENV=betanet`",

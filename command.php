@@ -85,13 +85,15 @@ class MyCommand extends UserCommand
         return $this->ValidateAccessWithParameters($this->chat_id, $this->message_id, $this->user_id);
     }
 
-    public static function ValidateAccessWithParameters($chat_id, $message_id, $user_id)
+    public static function ValidateAccessWithParameters($chatId, $messageId, $userId, $allowDelete = true)
     {
-        if (in_array($chat_id, Config::$restrictedChatIds) && !in_array($user_id, Config::$adminIds)) {
-            Request::deleteMessage([
-                'chat_id' => $chat_id,
-                'message_id' => $message_id,
-            ]);
+        if (in_array($chatId, Config::$restrictedChatIds) && !in_array($userId, Config::$adminIds)) {
+            if($allowDelete) {
+                Request::deleteMessage([
+                    'chat_id' => $chatId,
+                    'message_id' => $messageId,
+                ]);
+            }
             return false;
         }
         return true;
