@@ -40,18 +40,18 @@ const nearPromise = (async () => {
                         console.log("Stake Error");
                     }
                 } catch (e) {
-                    console.log("Stake transaction processed with unknown result");
+                    console.log("Stake transaction processed with unknown result. Check delegation status in explorer and try /stake command to proceed.");
                 }
 
             }
             else {
-                console.log("Deposit Error");
+                console.log("Deposit Error. Check delegation status in explorer and try /stake command to proceed.");
             }
         } catch (e) {
             console.log("Deposit transaction processed with unknown result");
         }
     } else
-        console.log("Unhandled error");
+        console.log("Unhandled error.");
 
     return near;
 })();

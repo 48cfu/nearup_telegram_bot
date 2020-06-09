@@ -112,5 +112,9 @@
   },
   "ping": {
     "enterContractName": "Please enter name of the contract in order to `ping` it. Your master account: `{%0%}`."
+  },
+  "stake": {
+    "pleaseEnterStakingPoolContract": "Please enter the name of your staking pool contract (for example: `node`) where you had delegated tokens already",
+    "howManyTokensStake": "How many NEAR tokens do you want to stake to the contract"
   }
 }
