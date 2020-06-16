@@ -49,6 +49,7 @@ class ViewAccountCommand extends MyCommand
                     if ($paramPosition > -1) {
                         $account = substr($text_full, $paramPosition + 1);
                         $data['text'] = NearView:: GetAccountDetails($account, $this->strings);
+                        $data['parse_mode'] = 'markdown';
                         Request::sendMessage($data);
 
                         $this->conversation->stop();

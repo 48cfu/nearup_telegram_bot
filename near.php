@@ -242,7 +242,7 @@ Class NearView
                 $alert = " ⚠️ (" . $validator["num_produced_blocks"] . "/" . $validator["num_expected_blocks"] . ")";
                 $alertFound = true;
             }
-            $reply .= (str_pad(($i+1), $validatorPositionsQuantity, "0", STR_PAD_LEFT)) . ". " . NearView::EscapeMarkdownCharacters($validator["account_id"]) . ": `" . NearData::RoundNearBalance($validator["stake"]) . " NEAR`" . $alert . "\n";
+            $reply .= (str_pad(($i + 1), $validatorPositionsQuantity, "0", STR_PAD_LEFT)) . ". " . NearView::EscapeMarkdownCharacters($validator["account_id"]) . ": `" . NearData::RoundNearBalance($validator["stake"]) . " NEAR`" . $alert . "\n";
         }
 
         if ($alertFound)
@@ -278,8 +278,10 @@ Class NearView
         $output = ["{$strings['account']} *" . strtoupper($account) . "*",
             "{$strings['balance']}: `" . NearData::RoundNearBalance($accountData["amount"]) . " NEAR`",
             "{$strings['locked']}: `" . NearData::RoundNearBalance($accountData["locked"]) . " NEAR`",
-            "{$strings['storageUsage']}: `" . NearData::RoundNearBalance($accountData["storage_usage"]) . "`",
-            "{$strings['accessKeysList']}: /ViewAccessKey\_" . str_replace(".", "\_", $account)];
+            "{$strings['storageUsage']}: `" . NearData::RoundNearBalance($accountData["storage_usage"]) . "`"];
+
+        if (strpos($account, "_") === false)
+            $output[] = "{$strings['accessKeysList']}: /ViewAccessKey\_" . str_replace(".", "\_", $account);
 
         return join(chr(10), $output);
     }
